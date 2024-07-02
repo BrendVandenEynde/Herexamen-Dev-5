@@ -1,11 +1,11 @@
 <script setup>
-import HomeComp from '../components/HomeComp.vue';
 import Navbar from '../components/NavBar.vue';
 </script>
 
 <template>
     <div>
         <Navbar />
-        <HomeComp />
+        <h2>Shoe Configurator Page</h2>
+        <!-- Add your shoe configurator functionality here -->
     </div>
 </template>

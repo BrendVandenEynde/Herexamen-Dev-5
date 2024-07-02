@@ -1,11 +1,11 @@
 <script setup>
-import HomeComp from '../components/HomeComp.vue';
 import Navbar from '../components/NavBar.vue';
 </script>
 
 <template>
     <div>
         <Navbar />
-        <HomeComp />
+        <h2>Basket Page</h2>
+        <!-- Add your basket functionality here -->
     </div>
 </template>
