@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '../components/NavBar.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -13,13 +13,6 @@ const initializeThreeJs = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('threejs-container').appendChild(renderer.domElement);
 
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-
-    // add cube to scene
-    scene.add(cube);
-
     // Add lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -28,14 +21,20 @@ const initializeThreeJs = () => {
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
+    // Initialize variable for the shoe model
+    const shoeModel = ref(null);
+
     // Load GLB model
     const loader = new GLTFLoader();
     loader.load('/models/shoe-optimized-arne.glb', (gltf) => {
         const model = gltf.scene;
         console.log('Model loaded:', model); // Log model information
-        model.position.set(2, 0, 0); // Position it next to the cube
-        model.scale.set(0.5, 0.5, 0.5); // Adjust scale if necessary
+        model.position.set(0, 0, 0); // Position the shoe model
+        model.scale.set(1, 1, 1); // Adjust scale if necessary
         scene.add(model);
+        
+        // Assign the loaded model to the ref variable
+        shoeModel.value = model;
     }, undefined, (error) => {
         console.error('An error occurred while loading the model:', error);
     });
@@ -45,8 +44,11 @@ const initializeThreeJs = () => {
     const animate = function () {
         requestAnimationFrame(animate);
 
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
+        // Rotate the shoe model
+        if (shoeModel.value) {
+            shoeModel.value.rotation.x += 0.01;
+            shoeModel.value.rotation.y += 0.01;
+        }
 
         renderer.render(scene, camera);
     };
