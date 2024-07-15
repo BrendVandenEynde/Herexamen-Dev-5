@@ -5,6 +5,19 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+const showPopup = ref(false);
+const selectedCircle = ref(null);
+
+const openPopup = (circleNumber) => {
+    selectedCircle.value = circleNumber;
+    showPopup.value = true;
+};
+
+const closePopup = () => {
+    showPopup.value = false;
+    selectedCircle.value = null;
+};
+
 const initializeThreeJs = () => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xddffdd); // Set a light gray background color
@@ -101,6 +114,19 @@ onMounted(() => {
         <!-- Add your shoe configurator functionality here -->
         <!-- Three.js will render the scene inside this div -->
         <div id="threejs-container"></div>
+        <div class="left-navbar">
+            <div class="circle" @click="openPopup(1)">1</div>
+            <div class="circle" @click="openPopup(2)">2</div>
+            <div class="circle" @click="openPopup(3)">3</div>
+            <div class="circle" @click="openPopup(4)">4</div>
+        </div>
+        <div v-if="showPopup" class="popup-overlay" @click="closePopup">
+            <div class="popup-content" @click.stop>
+                <h2>Popup {{ selectedCircle }}</h2>
+                <p>This is the content of popup {{ selectedCircle }}.</p>
+                <button @click="closePopup">Close</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -130,10 +156,63 @@ onMounted(() => {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-.page-title {
-    position: relative;
-    z-index: 2;
-    margin-top: 70px;
+.left-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+}
+
+.circle {
+    width: 40px;
+    height: 40px;
+    margin: 10px 0;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.circle:hover {
+    background-color: #ddd;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+}
+
+.popup-content {
+    background-color: #fff;
     padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content h2 {
+    margin-top: 0;
+}
+
+.popup-content button {
+    margin-top: 10px;
 }
 </style>
