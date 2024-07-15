@@ -3,6 +3,7 @@ import Navbar from '../components/NavBar.vue';
 import { onMounted, ref } from 'vue';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const initializeThreeJs = () => {
     const scene = new THREE.Scene();
@@ -29,7 +30,7 @@ const initializeThreeJs = () => {
     loader.load('/models/shoe-optimized-arne.glb', (gltf) => {
         const model = gltf.scene;
         console.log('Model loaded:', model); // Log model information
-        model.position.set(0, 0, 0); // Position the shoe model
+        model.position.set(0, 1, 0); // Position the shoe model above the platform
         model.scale.set(1, 1, 1); // Adjust scale if necessary
         scene.add(model);
         
@@ -38,6 +39,21 @@ const initializeThreeJs = () => {
     }, undefined, (error) => {
         console.error('An error occurred while loading the model:', error);
     });
+
+    // Create a square platform
+    const platformGeometry = new THREE.BoxGeometry(3, 0.1, 3); // Make the platform larger and thin
+    const platformMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
+    const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+    platform.position.y = 0; // Position the platform at ground level
+    scene.add(platform);
+
+    // Add OrbitControls for camera
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // Enable damping (inertia)
+    controls.dampingFactor = 0.05; // Damping inertia factor
+    controls.screenSpacePanning = false;
+    controls.minDistance = 2; // Minimum distance to the model
+    controls.maxDistance = 10; // Maximum distance to the model
 
     camera.position.z = 5;
 
@@ -49,6 +65,8 @@ const initializeThreeJs = () => {
             shoeModel.value.rotation.x += 0.01;
             shoeModel.value.rotation.y += 0.01;
         }
+
+        controls.update(); // Update controls
 
         renderer.render(scene, camera);
     };
