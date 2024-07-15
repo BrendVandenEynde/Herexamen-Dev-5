@@ -19,8 +19,23 @@
       <transition name="menu-slide">
         <div v-if="activeMenu !== null" class="menu-overlay">
           <div class="menu-content">
-            <h2>Select Color</h2>
-            <p>This is the content of menu {{ activeMenu }}.</p>
+            <template v-if="activeMenu === 1">
+              <h2>Select Color</h2>
+              <div class="color-options">
+                <div
+                  v-for="color in colorOptions"
+                  :key="color"
+                  class="color-option"
+                  :style="{ backgroundColor: color }"
+                  @click="selectColor(color)"
+                ></div>
+              </div>
+            </template>
+            <template v-if="activeMenu === 2">
+              <h2>Menu 2</h2>
+              <p>Content for Menu 2.</p>
+            </template>
+            <!-- Add more templates for other menus as needed -->
             <button @click="closeMenu">Close</button>
           </div>
         </div>
@@ -53,6 +68,12 @@
   
   const closeMenu = () => {
     activeMenu.value = null;
+  };
+  
+  const selectColor = (color) => {
+    console.log('Selected color:', color);
+    // Implement your logic here to apply the selected color to your 3D model or other components
+    closeMenu();  // Close the menu after selecting a color
   };
   
   const initializeThreeJs = () => {
@@ -143,6 +164,10 @@
   onMounted(() => {
     initializeThreeJs();
   });
+  
+  // Color options for the first menu (activeMenu === 1)
+  const colorOptions = ref(['#FF5733', '#000000', '#3498DB', '#FFFFFF', '#2ECC71']);
+  
   </script>
   
   <style scoped>
@@ -234,6 +259,25 @@
   .menu-slide-enter,
   .menu-slide-leave-to {
     transform: translateX(-100%);
+  }
+  
+  .color-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .color-option {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .color-option:hover {
+    transform: scale(1.1);
   }
   </style>
   
