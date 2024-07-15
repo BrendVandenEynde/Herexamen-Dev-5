@@ -40,12 +40,28 @@ const initializeThreeJs = () => {
         console.error('An error occurred while loading the model:', error);
     });
 
-    // Create a square platform
-    const platformGeometry = new THREE.BoxGeometry(3, 0.1, 3); // Make the platform larger and thin
+    // Create a rounded square platform
+    const platformGeometry = new THREE.ExtrudeGeometry(createRoundedSquare(1.5, 0.2), { depth: 0.2, bevelEnabled: false });
     const platformMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
     const platform = new THREE.Mesh(platformGeometry, platformMaterial);
-    platform.position.y = 0; // Position the platform at ground level
+    platform.rotation.x = -Math.PI / 2; // Rotate the platform to be horizontal
+    platform.position.y = -1; // Position the platform at ground level
     scene.add(platform);
+
+    // Function to create a rounded square shape
+    function createRoundedSquare(size, radius) {
+        const shape = new THREE.Shape();
+        shape.moveTo(-size + radius, -size);
+        shape.lineTo(size - radius, -size);
+        shape.quadraticCurveTo(size, -size, size, -size + radius);
+        shape.lineTo(size, size - radius);
+        shape.quadraticCurveTo(size, size, size - radius, size);
+        shape.lineTo(-size + radius, size);
+        shape.quadraticCurveTo(-size, size, -size, size - radius);
+        shape.lineTo(-size, -size + radius);
+        shape.quadraticCurveTo(-size, -size, -size + radius, -size);
+        return shape;
+    }
 
     // Add OrbitControls for camera
     const controls = new OrbitControls(camera, renderer.domElement);
