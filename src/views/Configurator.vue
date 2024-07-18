@@ -53,12 +53,12 @@ const initializeThreeJs = () => {
   // Load skybox textures
   const loader = new THREE.CubeTextureLoader();
   const skyboxTexture = loader.load([
-    '/path/to/posx.jpg', // Positive X
-    '/path/to/negx.jpg', // Negative X
-    '/path/to/posy.jpg', // Positive Y
-    '/path/to/negy.jpg', // Negative Y
-    '/path/to/posz.jpg', // Positive Z
-    '/path/to/negz.jpg'  // Negative Z
+    '/cubemap/px.png', // Positive X
+    '/cubemap/nx.png', // Negative X
+    '/cubemap/py.png', // Positive Y
+    '/cubemap/ny.png', // Negative Y
+    '/cubemap/pz.png', // Positive Z
+    '/cubemap/nz.png'  // Negative Z
   ]);
   scene.background = skyboxTexture;
 
