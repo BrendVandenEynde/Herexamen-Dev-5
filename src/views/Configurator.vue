@@ -49,7 +49,19 @@ const updateShoeSize = () => {
 
 const initializeThreeJs = () => {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xddffdd); // Set a light gray background color
+  
+  // Load skybox textures
+  const loader = new THREE.CubeTextureLoader();
+  const skyboxTexture = loader.load([
+    '/path/to/posx.jpg', // Positive X
+    '/path/to/negx.jpg', // Negative X
+    '/path/to/posy.jpg', // Positive Y
+    '/path/to/negy.jpg', // Negative Y
+    '/path/to/posz.jpg', // Positive Z
+    '/path/to/negz.jpg'  // Negative Z
+  ]);
+  scene.background = skyboxTexture;
+
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer();
 
@@ -65,8 +77,8 @@ const initializeThreeJs = () => {
   scene.add(directionalLight);
 
   // Load GLB model
-  const loader = new GLTFLoader();
-  loader.load('/models/shoe-optimized-arne.glb', (gltf) => {
+  const gltfLoader = new GLTFLoader();
+  gltfLoader.load('/models/shoe-optimized-arne.glb', (gltf) => {
     const model = gltf.scene;
     console.log('Model loaded:', model); // Log model information
     model.position.set(0, 1, 0); // Position the shoe model above the platform
@@ -139,6 +151,7 @@ const initializeThreeJs = () => {
 onMounted(() => {
   initializeThreeJs();
 });
+
 
 // Color options for the first menu (activeMenu === 'laces')
 const colorOptions = ref(['#FF5733', '#000000', '#3498DB', '#FFFFFF', '#2ECC71']);
