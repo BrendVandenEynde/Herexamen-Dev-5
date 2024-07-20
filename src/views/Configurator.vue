@@ -31,7 +31,8 @@ const colorOptions = ref([
   '#F1C40F', // Yellow
   '#E67E22', // Orange
   '#BDC3C7', // Light Gray
-  '#7F8C8D'  // Dark Gray
+  '#7F8C8D', // Dark Gray
+  '#00008B', // dark blue
 ]); // Define color options
 
 const toggleMenu = (circleId) => {
