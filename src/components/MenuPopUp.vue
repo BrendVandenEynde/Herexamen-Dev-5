@@ -1,108 +1,129 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue';
 
+// Props to receive from the parent component
 const props = defineProps({
-    activeMenu: {
-        type: String,
-        default: null
-    },
-    colorOptions: {
-        type: Array,
-        required: true
-    },
-    shoeSize: {
-        type: Number,
-        default: 42
-    }
+  activeMenu: {
+    type: String,
+    default: null
+  },
+  colorOptions: {
+    type: Array,
+    required: true
+  },
+  shoeSize: {
+    type: Number,
+    default: 42
+  }
 });
 
+// Emits to send events to the parent component
 const emits = defineEmits(['closeMenu', 'selectColor', 'update:shoeSize']);
 
+// Close the menu
 const closeMenu = () => {
-    emits('closeMenu');
+  emits('closeMenu');
 };
 
+// Select a color for a specific part
 const selectColor = (part, color) => {
-    emits('selectColor', part, color);
+  emits('selectColor', part, color);
 };
 
+// Update the shoe size
 const updateShoeSize = (event) => {
-    emits('update:shoeSize', Number(event.target.value));
+  emits('update:shoeSize', Number(event.target.value));
+};
+
+// Split color options into rows of 5 colors each
+const splitColors = (colors) => {
+  const rows = [];
+  for (let i = 0; i < colors.length; i += 5) {
+    rows.push(colors.slice(i, i + 5));
+  }
+  return rows;
 };
 </script>
 
 <template>
-    <transition name="menu-slide">
-        <div v-if="activeMenu !== null" class="menu-overlay">
-            <div class="menu-content">
-                <template v-if="activeMenu !== 'options'">
-                    <h2>Select Color for {{ activeMenu }}</h2>
-                    <div class="color-options">
-                        <div v-for="color in colorOptions" :key="color" class="color-option"
-                            :style="{ backgroundColor: color }" @click="selectColor(activeMenu, color)"></div>
-                    </div>
-                </template>
-                <template v-else>
-                    <h2>Options</h2>
-                    <input type="number" :value="shoeSize" @input="updateShoeSize" placeholder="Enter shoe size" />
-                </template>
-                <button @click="closeMenu">Close</button>
+  <transition name="menu-slide">
+    <div v-if="activeMenu !== null" class="menu-overlay">
+      <div class="menu-content">
+        <template v-if="activeMenu !== 'options'">
+          <h2>Select Color for {{ activeMenu }}</h2>
+          <div class="color-options">
+            <div class="color-row" v-for="(row, rowIndex) in splitColors(colorOptions)" :key="rowIndex">
+              <div v-for="color in row" :key="color" class="color-option"
+                :style="{ backgroundColor: color }" @click="selectColor(activeMenu, color)"></div>
             </div>
-        </div>
-    </transition>
+          </div>
+        </template>
+        <template v-else>
+          <h2>Options</h2>
+          <input type="number" :value="shoeSize" @input="updateShoeSize" placeholder="Enter shoe size" />
+        </template>
+        <button @click="closeMenu">Close</button>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
 .menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    z-index: 4;
-    overflow-x: hidden;
-    transition: width 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 4;
+  overflow-x: hidden;
+  transition: width 0.3s ease;
 }
 
 .menu-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    height: 100%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 100%;
 }
 
 .menu-slide-enter-active,
 .menu-slide-leave-active {
-    transition: transform 0.3s;
+  transition: transform 0.3s;
 }
 
 .menu-slide-enter,
 .menu-slide-leave-to {
-    transform: translateX(-100%);
+  transform: translateX(-100%);
 }
 
 .color-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.color-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
 .color-option {
-    width: 30px;
-    height: 30px;
-    margin: 5px;
-    border-radius: 50%;
-    cursor: pointer;
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .color-option:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 </style>
