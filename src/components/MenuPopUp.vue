@@ -1,129 +1,155 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref, computed } from 'vue';
 
-// Props to receive from the parent component
+// Define props
 const props = defineProps({
-  activeMenu: {
-    type: String,
-    default: null
-  },
-  colorOptions: {
-    type: Array,
-    required: true
-  },
-  shoeSize: {
-    type: Number,
-    default: 42
-  }
+    activeMenu: {
+        type: String,
+        default: null
+    },
+    colorOptions: {
+        type: Array,
+        required: true
+    },
+    shoeSize: {
+        type: Number,
+        default: 42
+    }
 });
 
-// Emits to send events to the parent component
 const emits = defineEmits(['closeMenu', 'selectColor', 'update:shoeSize']);
 
-// Close the menu
-const closeMenu = () => {
-  emits('closeMenu');
-};
+// Define size limits
+const MIN_EU_SIZE = 35; // Minimum EU size
+const MAX_EU_SIZE = 50; // Maximum EU size
 
-// Select a color for a specific part
-const selectColor = (part, color) => {
-  emits('selectColor', part, color);
-};
+const euroSize = ref(props.shoeSize);
 
-// Update the shoe size
+// Compute US and UK sizes based on the input EU size
+const usSize = computed(() => convertEuroToUS(euroSize.value));
+const ukSize = computed(() => convertEuroToUK(euroSize.value));
+
+// Conversion functions
+const convertEuroToUS = (euroSize) => (euroSize - 33) * 1.5 + 4;
+const convertEuroToUK = (euroSize) => euroSize - 33;
+
+// Update size function with limits
 const updateShoeSize = (event) => {
-  emits('update:shoeSize', Number(event.target.value));
-};
-
-// Split color options into rows of 5 colors each
-const splitColors = (colors) => {
-  const rows = [];
-  for (let i = 0; i < colors.length; i += 5) {
-    rows.push(colors.slice(i, i + 5));
-  }
-  return rows;
+    let newSize = Number(event.target.value);
+    if (newSize < MIN_EU_SIZE) {
+        newSize = MIN_EU_SIZE;
+    } else if (newSize > MAX_EU_SIZE) {
+        newSize = MAX_EU_SIZE;
+    }
+    euroSize.value = newSize;
+    emits('update:shoeSize', newSize);
 };
 </script>
 
 <template>
-  <transition name="menu-slide">
-    <div v-if="activeMenu !== null" class="menu-overlay">
-      <div class="menu-content">
-        <template v-if="activeMenu !== 'options'">
-          <h2>Select Color for {{ activeMenu }}</h2>
-          <div class="color-options">
-            <div class="color-row" v-for="(row, rowIndex) in splitColors(colorOptions)" :key="rowIndex">
-              <div v-for="color in row" :key="color" class="color-option"
-                :style="{ backgroundColor: color }" @click="selectColor(activeMenu, color)"></div>
+    <transition name="menu-slide">
+        <div v-if="activeMenu !== null" class="menu-overlay">
+            <div class="menu-content">
+                <template v-if="activeMenu !== 'options'">
+                    <h2>Select Color for {{ activeMenu }}</h2>
+                    <div class="color-options">
+                        <div v-for="color in colorOptions" :key="color" class="color-option"
+                            :style="{ backgroundColor: color }" @click="selectColor(activeMenu, color)"></div>
+                    </div>
+                </template>
+                <template v-else>
+                    <h2>Options</h2>
+                    <div class="size-options">
+                        <label for="euro-size">EU Size:</label>
+                        <input 
+                            type="number" 
+                            id="euro-size" 
+                            :value="euroSize" 
+                            @input="updateShoeSize" 
+                            placeholder="EU Size" 
+                            :min="MIN_EU_SIZE" 
+                            :max="MAX_EU_SIZE"
+                        />
+                        <p>US Size: {{ usSize.toFixed(1) }}</p>
+                        <p>UK Size: {{ ukSize.toFixed(1) }}</p>
+                    </div>
+                </template>
+                <button @click="closeMenu">Close</button>
             </div>
-          </div>
-        </template>
-        <template v-else>
-          <h2>Options</h2>
-          <input type="number" :value="shoeSize" @input="updateShoeSize" placeholder="Enter shoe size" />
-        </template>
-        <button @click="closeMenu">Close</button>
-      </div>
-    </div>
-  </transition>
+        </div>
+    </transition>
 </template>
 
 <style scoped>
 .menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  z-index: 4;
-  overflow-x: hidden;
-  transition: width 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 4;
+    overflow-x: hidden;
+    transition: width 0.3s ease;
 }
 
 .menu-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  height: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 100%;
 }
 
 .menu-slide-enter-active,
 .menu-slide-leave-active {
-  transition: transform 0.3s;
+    transition: transform 0.3s;
 }
 
 .menu-slide-enter,
 .menu-slide-leave-to {
-  transform: translateX(-100%);
+    transform: translateX(-100%);
 }
 
 .color-options {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-}
-
-.color-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .color-option {
-  width: 30px;
-  height: 30px;
-  margin: 5px;
-  border-radius: 50%;
-  cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .color-option:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.size-options {
+    margin-top: 20px;
+}
+
+.size-options label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.size-options input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.size-options p {
+    margin: 5px 0;
 }
 </style>
