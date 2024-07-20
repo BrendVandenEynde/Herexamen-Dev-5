@@ -44,17 +44,27 @@ const updateShoeSize = (event) => {
     euroSize.value = newSize;
     emits('update:shoeSize', newSize);
 };
+
+// Emit closeMenu event
+const closeMenu = () => {
+    emits('closeMenu');
+};
+
+// Emit selectColor event
+const selectColor = (color) => {
+    emits('selectColor', props.activeMenu, color);
+};
 </script>
 
 <template>
     <transition name="menu-slide">
-        <div v-if="activeMenu !== null" class="menu-overlay">
-            <div class="menu-content">
+        <div v-if="activeMenu !== null" class="menu-overlay" @click="closeMenu">
+            <div class="menu-content" @click.stop>
                 <template v-if="activeMenu !== 'options'">
                     <h2>Select Color for {{ activeMenu }}</h2>
                     <div class="color-options">
                         <div v-for="color in colorOptions" :key="color" class="color-option"
-                            :style="{ backgroundColor: color }" @click="selectColor(activeMenu, color)"></div>
+                            :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
                     </div>
                 </template>
                 <template v-else>
