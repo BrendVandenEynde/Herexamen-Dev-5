@@ -27,12 +27,16 @@ const selectColor = (part, color) => {
     <transition name="menu-slide">
         <div v-if="activeMenu !== null" class="menu-overlay">
             <div class="menu-content">
-                <template v-if="activeMenu === 'laces'">
-                    <h2>Select Color for Laces</h2>
+                <template v-if="activeMenu !== 'options'">
+                    <h2>Select Color for {{ activeMenu }}</h2>
                     <div class="color-options">
                         <div v-for="color in colorOptions" :key="color" class="color-option"
-                            :style="{ backgroundColor: color }" @click="selectColor('laces', color)"></div>
+                            :style="{ backgroundColor: color }" @click="selectColor(activeMenu, color)"></div>
                     </div>
+                </template>
+                <template v-else>
+                    <h2>Options</h2>
+                    <input type="number" v-model.number="shoeSize" placeholder="Enter shoe size" />
                 </template>
                 <button @click="closeMenu">Close</button>
             </div>
