@@ -9,10 +9,14 @@ const props = defineProps({
     colorOptions: {
         type: Array,
         required: true
+    },
+    shoeSize: {
+        type: Number,
+        default: 42
     }
 });
 
-const emits = defineEmits(['closeMenu', 'selectColor']);
+const emits = defineEmits(['closeMenu', 'selectColor', 'update:shoeSize']);
 
 const closeMenu = () => {
     emits('closeMenu');
@@ -20,6 +24,10 @@ const closeMenu = () => {
 
 const selectColor = (part, color) => {
     emits('selectColor', part, color);
+};
+
+const updateShoeSize = (event) => {
+    emits('update:shoeSize', Number(event.target.value));
 };
 </script>
 
@@ -36,7 +44,7 @@ const selectColor = (part, color) => {
                 </template>
                 <template v-else>
                     <h2>Options</h2>
-                    <input type="number" v-model.number="shoeSize" placeholder="Enter shoe size" />
+                    <input type="number" :value="shoeSize" @input="updateShoeSize" placeholder="Enter shoe size" />
                 </template>
                 <button @click="closeMenu">Close</button>
             </div>

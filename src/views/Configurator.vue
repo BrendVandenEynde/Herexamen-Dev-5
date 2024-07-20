@@ -21,7 +21,18 @@ const circles = ref([
 const activeMenu = ref(null);
 const shoeModel = ref(null);
 const shoeSize = ref(42); // Default shoe size
-const colorOptions = ref(['#FF5733', '#000000', '#3498DB', '#FFFFFF', '#2ECC71']); // Define color options
+const colorOptions = ref([
+  '#FF0000', // Red
+  '#000000', // Black
+  '#3498DB', // Blue
+  '#FFFFFF', // White
+  '#2ECC71', // Green
+  '#8E44AD', // Purple
+  '#F1C40F', // Yellow
+  '#E67E22', // Orange
+  '#BDC3C7', // Light Gray
+  '#7F8C8D'  // Dark Gray
+]); // Define color options
 
 const toggleMenu = (circleId) => {
   activeMenu.value = activeMenu.value === circleId ? null : circleId;
@@ -158,7 +169,7 @@ onMounted(() => {
     <LeftMenu :circles="circles" :activeMenu="activeMenu" @toggleMenu="toggleMenu" />
     <!-- Dynamic menu content -->
     <MenuPopUp v-if="activeMenu !== null" :activeMenu="activeMenu" @closeMenu="closeMenu" @selectColor="selectColor"
-      :colorOptions="colorOptions" />
+      :colorOptions="colorOptions" :shoeSize="shoeSize" @update:shoeSize="shoeSize = $event" />
   </div>
 </template>
 
