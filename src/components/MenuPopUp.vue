@@ -17,7 +17,7 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(['closeMenu', 'selectColor', 'update:shoeSize']);
+const emits = defineEmits(['closeMenu', 'selectColor', 'selectMaterial', 'update:shoeSize']);
 
 // Define size limits
 const MIN_EU_SIZE = 35; // Minimum EU size
@@ -54,6 +54,11 @@ const closeMenu = () => {
 const selectColor = (color) => {
     emits('selectColor', props.activeMenu, color);
 };
+
+// Emit selectMaterial event
+const selectMaterial = (material) => {
+    emits('selectMaterial', props.activeMenu, material);
+};
 </script>
 
 <template>
@@ -65,6 +70,14 @@ const selectColor = (color) => {
                     <div class="color-options">
                         <div v-for="color in colorOptions" :key="color" class="color-option"
                             :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
+                    </div>
+                </template>
+                <template v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'outside_1' || activeMenu === 'outside_2' || activeMenu === 'sole_1' || activeMenu === 'sole_2'">
+                    <h2>Select Material for {{ activeMenu }}</h2>
+                    <div class="material-options">
+                        <div class="material-option" @click="selectMaterial('Placeholder Material 1')">Material 1</div>
+                        <div class="material-option" @click="selectMaterial('Placeholder Material 2')">Material 2</div>
+                        <div class="material-option" @click="selectMaterial('Placeholder Material 3')">Material 3</div>
                     </div>
                 </template>
                 <template v-else>
@@ -125,22 +138,28 @@ const selectColor = (color) => {
     transform: translateX(-100%);
 }
 
-.color-options {
+.color-options,
+.material-options {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px;
 }
 
-.color-option {
+.color-option,
+.material-option {
     width: 30px;
     height: 30px;
     margin: 5px;
     border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.color-option:hover {
+.color-option:hover,
+.material-option:hover {
     transform: scale(1.1);
 }
 
