@@ -44,7 +44,6 @@ const materialOptions = ref([
     textures: {
       ao: '/textures/Stylized_Scales_003_ambientOcclusion.png',
       base: '/textures/Stylized_Scales_003_basecolor.png',
-      height: '/textures/Stylized_Scales_003_height.png',
       normal: '/textures/Stylized_Scales_003_normal.png',
       roughness: '/textures/Stylized_Scales_003_roughness.png'
     }
