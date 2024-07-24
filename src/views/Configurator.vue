@@ -58,6 +58,16 @@ const materialOptions = ref([
       opacity: '/textures/Fabric_Lace_038_opacity.png'
     }
   },
+  {
+    name: 'Tropic Lace',
+    textures: {
+      ao: '/textures/tropic/Fabric_Lace_036_ambientOcclusion.png',
+      base: '/textures/tropic/Fabric_Lace_036_basecolor.png',
+      normal: '/textures/tropic/Fabric_Lace_036_normal.png',
+      roughness: '/textures/tropic/Fabric_Lace_036_roughness.png',
+      opacity: '/textures/tropic/Fabric_Lace_036_opacity.png'
+    }
+  },
   { name: 'Material 3', textures: { base: '/textures/material3.jpg' } }
 ]);
 
