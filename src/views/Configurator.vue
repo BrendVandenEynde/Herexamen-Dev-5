@@ -8,6 +8,7 @@ import Navbar from '../components/NavBar.vue';
 import LeftMenu from '../components/LeftMenu.vue';
 import MenuPopUp from '../components/MenuPopUp.vue';
 
+// Define the circles for the menu items
 const circles = ref([
   { id: 'laces', name: 'Laces' },
   { id: 'inside', name: 'Inside' },
@@ -21,6 +22,8 @@ const circles = ref([
 const activeMenu = ref(null);
 const shoeModel = ref(null);
 const shoeSize = ref(42); // Default shoe size
+
+// Define color options
 const colorOptions = ref([
   '#FF0000', // Red
   '#000000', // Black
@@ -31,14 +34,24 @@ const colorOptions = ref([
   '#F1C40F', // Yellow
   '#E67E22', // Orange
   '#7F8C8D', // Dark Gray
-  '#00008B', // dark blue
-]); // Define color options
+  '#00008B', // Dark Blue
+]);
 
+// Define material options
 const materialOptions = ref([
-  { name: 'Material 1', texture: '/textures/material1.jpg' },
-  { name: 'Material 2', texture: '/textures/material2.jpg' },
-  { name: 'Material 3', texture: '/textures/material3.jpg' }
-]); // Define material options
+  {
+    name: 'Stylized Scales',
+    textures: {
+      ao: '/textures/Stylized_Scales_003_ambientOcclusion.png',
+      base: '/textures/Stylized_Scales_003_basecolor.png',
+      height: '/textures/Stylized_Scales_003_height.png',
+      normal: '/textures/Stylized_Scales_003_normal.png',
+      roughness: '/textures/Stylized_Scales_003_roughness.png'
+    }
+  },
+  { name: 'Material 2', textures: { base: '/textures/material2.jpg' } },
+  { name: 'Material 3', textures: { base: '/textures/material3.jpg' } }
+]);
 
 const toggleMenu = (circleId) => {
   activeMenu.value = activeMenu.value === circleId ? null : circleId;
@@ -48,6 +61,7 @@ const closeMenu = () => {
   activeMenu.value = null;
 };
 
+// Function to select color for a part
 const selectColor = (part, color) => {
   console.log(`Selected color for ${part}:`, color);
   if (shoeModel.value) {
@@ -57,25 +71,39 @@ const selectColor = (part, color) => {
       }
     });
   }
-  closeMenu(); // Close the menu after selecting a color
+  closeMenu();
 };
 
-const selectMaterial = (part, materialTexture) => {
-  console.log(`Selected material for ${part}:`, materialTexture);
+// Function to select material for a part
+const selectMaterial = (part, materialTextures) => {
+  if (!materialTextures) {
+    console.error(`Material textures for ${part} are undefined`);
+    return;
+  }
+
+  console.log(`Selected material for ${part}:`, materialTextures);
   if (shoeModel.value) {
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(materialTexture, (texture) => {
-      shoeModel.value.traverse((child) => {
-        if (child.isMesh && child.name === part) {
-          child.material.map = texture;
-          child.material.needsUpdate = true;
-        }
-      });
+
+    // Load textures conditionally based on the material options
+    const textures = {};
+    if (materialTextures.ao) textures.aoMap = textureLoader.load(materialTextures.ao);
+    if (materialTextures.base) textures.map = textureLoader.load(materialTextures.base);
+    if (materialTextures.height) textures.displacementMap = textureLoader.load(materialTextures.height);
+    if (materialTextures.normal) textures.normalMap = textureLoader.load(materialTextures.normal);
+    if (materialTextures.roughness) textures.roughnessMap = textureLoader.load(materialTextures.roughness);
+
+    shoeModel.value.traverse((child) => {
+      if (child.isMesh && child.name === part) {
+        Object.assign(child.material, textures);
+        child.material.needsUpdate = true;
+      }
     });
   }
-  closeMenu(); // Close the menu after selecting a material
+  closeMenu();
 };
 
+// Initialize Three.js scene
 const initializeThreeJs = () => {
   const scene = new THREE.Scene();
 
@@ -109,15 +137,14 @@ const initializeThreeJs = () => {
   const gltfLoader = new GLTFLoader();
   gltfLoader.load('/models/shoe-optimized-arne.glb', (gltf) => {
     const model = gltf.scene;
-    console.log('Model loaded:', model); // Log model information
-    model.position.set(0, 1, 0); // Position the shoe model above the platform
-    model.scale.set(1, 1, 1); // Adjust scale if necessary
+    console.log('Model loaded:', model);
+    model.position.set(0, 1, 0);
+    model.scale.set(1, 1, 1);
     scene.add(model);
 
-    // Assign the loaded model to the ref variable
     shoeModel.value = model;
 
-    // Traverse the model to log names of all children
+    // Traverse model to log child names
     model.traverse((child) => {
       if (child.isMesh) {
         console.log('Child name:', child.name);
@@ -131,8 +158,8 @@ const initializeThreeJs = () => {
   const platformGeometry = new THREE.ExtrudeGeometry(createRoundedSquare(1.5, 0.2), { depth: 0.2, bevelEnabled: false });
   const platformMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
   const platform = new THREE.Mesh(platformGeometry, platformMaterial);
-  platform.rotation.x = -Math.PI / 2; // Rotate the platform to be horizontal
-  platform.position.y = -1; // Position the platform at ground level
+  platform.rotation.x = -Math.PI / 2;
+  platform.position.y = -1;
   scene.add(platform);
 
   // Function to create a rounded square shape
@@ -152,24 +179,23 @@ const initializeThreeJs = () => {
 
   // Add OrbitControls for camera
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; // Enable damping (inertia)
-  controls.dampingFactor = 0.05; // Damping inertia factor
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
   controls.screenSpacePanning = false;
-  controls.minDistance = 2; // Minimum distance to the model
-  controls.maxDistance = 10; // Maximum distance to the model
+  controls.minDistance = 2;
+  controls.maxDistance = 10;
 
   camera.position.z = 5;
 
   const animate = function () {
     requestAnimationFrame(animate);
 
-    // Rotate the shoe model
     if (shoeModel.value) {
       shoeModel.value.rotation.x += 0.01;
       shoeModel.value.rotation.y += 0.01;
     }
 
-    controls.update(); // Update controls
+    controls.update();
 
     renderer.render(scene, camera);
   };
@@ -185,31 +211,16 @@ onMounted(() => {
 <template>
   <div id="app-container">
     <Navbar />
-    <!-- Three.js will render the scene inside this div -->
     <div id="threejs-container"></div>
-    <!-- Left sidebar menu -->
     <LeftMenu :circles="circles" :activeMenu="activeMenu" @toggleMenu="toggleMenu" />
-    <!-- Dynamic menu content -->
-    <MenuPopUp 
-      v-if="activeMenu !== null" 
-      :activeMenu="activeMenu" 
-      @closeMenu="closeMenu" 
-      @selectColor="selectColor" 
-      @selectMaterial="selectMaterial" 
-      :colorOptions="colorOptions" 
-      :materialOptions="materialOptions"
-      :shoeSize="shoeSize" 
-      @update:shoeSize="shoeSize = $event" 
-    />
+    <MenuPopUp v-if="activeMenu !== null" :activeMenu="activeMenu" @closeMenu="closeMenu" @selectColor="selectColor"
+      @selectMaterial="selectMaterial" :colorOptions="colorOptions" :materialOptions="materialOptions" />
   </div>
 </template>
 
 <style scoped>
 #app-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  display: flex;
 }
 
 #threejs-container {

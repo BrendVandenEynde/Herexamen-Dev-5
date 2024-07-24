@@ -60,8 +60,14 @@ const selectColor = (color) => {
 };
 
 // Emit selectMaterial event
-const selectMaterial = (material) => {
-    emits('selectMaterial', props.activeMenu, material);
+const selectMaterial = (materialName) => {
+    const selectedMaterial = props.materialOptions.find(m => m.name === materialName);
+    if (selectedMaterial) {
+        console.log(`Selected material: ${materialName}`, selectedMaterial.textures);
+        emits('selectMaterial', props.activeMenu, selectedMaterial.textures);
+    } else {
+        console.error(`Material ${materialName} not found`);
+    }
 };
 </script>
 
@@ -76,10 +82,12 @@ const selectMaterial = (material) => {
                             :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
                     </div>
                 </template>
-                <template v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'outside_1' || activeMenu === 'outside_2' || activeMenu === 'sole_1' || activeMenu === 'sole_2'">
+                <template
+                    v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'outside_1' || activeMenu === 'outside_2' || activeMenu === 'sole_1' || activeMenu === 'sole_2'">
                     <h2>Select Material for {{ activeMenu }}</h2>
                     <div class="material-options">
-                        <div v-for="material in materialOptions" :key="material.name" class="material-option" @click="selectMaterial(material.texture)">
+                        <div v-for="material in materialOptions" :key="material.name" class="material-option"
+                            @click="selectMaterial(material.name)">
                             {{ material.name }}
                         </div>
                     </div>
@@ -88,15 +96,8 @@ const selectMaterial = (material) => {
                     <h2>Options</h2>
                     <div class="size-options">
                         <label for="euro-size">EU Size:</label>
-                        <input 
-                            type="number" 
-                            id="euro-size" 
-                            :value="euroSize" 
-                            @input="updateShoeSize" 
-                            placeholder="EU Size" 
-                            :min="MIN_EU_SIZE" 
-                            :max="MAX_EU_SIZE"
-                        />
+                        <input type="number" id="euro-size" :value="euroSize" @input="updateShoeSize"
+                            placeholder="EU Size" :min="MIN_EU_SIZE" :max="MAX_EU_SIZE" />
                         <p>US Size: {{ usSize.toFixed(1) }}</p>
                         <p>UK Size: {{ ukSize.toFixed(1) }}</p>
                     </div>
