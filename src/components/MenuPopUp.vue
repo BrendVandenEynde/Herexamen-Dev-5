@@ -82,16 +82,6 @@ const selectMaterial = (materialName) => {
                             :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
                     </div>
                 </template>
-                <template
-                    v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'Upper Exterior' || activeMenu === 'Toe Cap' || activeMenu === 'Midsole ' || activeMenu === 'Outsole '">
-                    <h2>Select Material for {{ activeMenu }}</h2>
-                    <div class="material-options">
-                        <div v-for="material in materialOptions" :key="material.name" class="material-option"
-                            @click="selectMaterial(material.name)">
-                            {{ material.name }}
-                        </div>
-                    </div>
-                </template>
                 <template v-else>
                     <h2>Options</h2>
                     <div class="size-options">
@@ -100,6 +90,15 @@ const selectMaterial = (materialName) => {
                             placeholder="EU Size" :min="MIN_EU_SIZE" :max="MAX_EU_SIZE" />
                         <p>US Size: {{ usSize.toFixed(1) }}</p>
                         <p>UK Size: {{ ukSize.toFixed(1) }}</p>
+                    </div>
+                </template>
+                <template v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'Upper Exterior' || activeMenu === 'Midsole' || activeMenu === 'Outsole'">
+                    <h2>Select Material for {{ activeMenu }}</h2>
+                    <div class="material-options">
+                        <div v-for="material in materialOptions" :key="material.name" class="material-option"
+                            @click="selectMaterial(material.name)">
+                            {{ material.name }}
+                        </div>
                     </div>
                 </template>
                 <button @click="closeMenu">Close</button>
