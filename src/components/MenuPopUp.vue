@@ -75,14 +75,34 @@ const selectMaterial = (materialName) => {
     <transition name="menu-slide">
         <div v-if="activeMenu !== null" class="menu-overlay" @click="closeMenu">
             <div class="menu-content" @click.stop>
-                <template v-if="activeMenu !== 'options'">
+                <!-- Laces -->
+                <template v-if="activeMenu === 'laces'">
                     <h2>Select Color for {{ activeMenu }}</h2>
                     <div class="color-options">
                         <div v-for="color in colorOptions" :key="color" class="color-option"
                             :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
                     </div>
                 </template>
-                <template v-else>
+
+                <!-- Inside, Upper Exterior, Outside-1, Midsoule, Sole_1, Sole_2, Outsoule -->
+                <template
+                    v-else-if="['inside', 'outside_1', 'upper_exterior', 'midsoule', 'sole_1', 'sole_2', 'outsoule'].includes(activeMenu)">
+                    <h2>Select {{ ['inside', 'upper_exterior'].includes(activeMenu) ? 'Color and Material' : 'Material'
+                        }} for {{ activeMenu }}</h2>
+                    <div class="color-options">
+                        <div v-for="color in colorOptions" :key="color" class="color-option"
+                            :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
+                    </div>
+                    <div class="material-options">
+                        <div v-for="material in materialOptions" :key="material.name" class="material-option"
+                            @click="selectMaterial(material.name)">
+                            {{ material.name }}
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Options -->
+                <template v-else-if="activeMenu === 'options'">
                     <h2>Options</h2>
                     <div class="size-options">
                         <label for="euro-size">EU Size:</label>
@@ -92,15 +112,7 @@ const selectMaterial = (materialName) => {
                         <p>UK Size: {{ ukSize.toFixed(1) }}</p>
                     </div>
                 </template>
-                <template v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'Upper Exterior' || activeMenu === 'Midsole' || activeMenu === 'Outsole'">
-                    <h2>Select Material for {{ activeMenu }}</h2>
-                    <div class="material-options">
-                        <div v-for="material in materialOptions" :key="material.name" class="material-option"
-                            @click="selectMaterial(material.name)">
-                            {{ material.name }}
-                        </div>
-                    </div>
-                </template>
+
                 <button @click="closeMenu">Close</button>
             </div>
         </div>
