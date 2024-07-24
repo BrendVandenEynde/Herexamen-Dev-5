@@ -42,20 +42,20 @@ const materialOptions = ref([
   {
     name: 'Stylized Scales',
     textures: {
-      ao: '/textures/Stylized_Scales_003_ambientOcclusion.png',
-      base: '/textures/Stylized_Scales_003_basecolor.png',
-      normal: '/textures/Stylized_Scales_003_normal.png',
-      roughness: '/textures/Stylized_Scales_003_roughness.png'
+      ao: '/textures/scales/Stylized_Scales_003_ambientOcclusion.png',
+      base: '/textures/scales/Stylized_Scales_003_basecolor.png',
+      normal: '/textures/scales/Stylized_Scales_003_normal.png',
+      roughness: '/textures/scales/Stylized_Scales_003_roughness.png'
     }
   },
   {
     name: 'Fabric Lace',
     textures: {
-      ao: '/textures/Fabric_Lace_038_ambientOcclusion.png',
-      base: '/textures/Fabric_Lace_038_basecolor.png',
-      normal: '/textures/Fabric_Lace_038_normal.png',
-      roughness: '/textures/Fabric_Lace_038_roughness.png',
-      opacity: '/textures/Fabric_Lace_038_opacity.png'
+      ao: '/textures/leopard/Fabric_Lace_038_ambientOcclusion.png',
+      base: '/textures/leopard/Fabric_Lace_038_basecolor.png',
+      normal: '/textures/leopard/Fabric_Lace_038_normal.png',
+      roughness: '/textures/leopard/Fabric_Lace_038_roughness.png',
+      opacity: '/textures/leopard/Fabric_Lace_038_opacity.png'
     }
   },
   {
@@ -78,7 +78,15 @@ const materialOptions = ref([
       roughness: '/textures/military/Fabric_Mesh_Military_001_roughness.jpg'
     }
   },
-  { name: 'Material 3', textures: { base: '/textures/material3.jpg' } }
+  {
+    name: 'Hexagon Fabric',
+    textures: {
+      ao: '/textures/hexagon/Fabric_026_ambientOcclusion.jpg',
+      base: '/textures/hexagon/Fabric_026_basecolor.jpg',
+      normal: '/textures/hexagon/Fabric_026_normal.jpg',
+      roughness: '/textures/hexagon/Fabric_026_roughness.jpg'
+    }
+  }
 ]);
 
 const toggleMenu = (circleId) => {
