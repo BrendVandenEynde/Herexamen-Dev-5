@@ -9,14 +9,15 @@ const country = ref('');
 const router = useRouter();
 
 const handleRegister = () => {
-    // Simulate a registration process (no backend involved for now)
-    // For demonstration, check if all fields are filled
     if (name.value !== '' && email.value !== '' && password.value !== '' && country.value !== '') {
-        // Navigate to the home page after successful registration
         router.push({ name: 'Home' });
     } else {
-        alert('Please fill in all fields'); // Handle empty fields
+        alert('Please fill in all fields');
     }
+};
+
+const goToLogin = () => {
+    router.push({ name: 'Login' });
 };
 </script>
 
@@ -40,8 +41,11 @@ const handleRegister = () => {
                 <label for="country">Country:</label>
                 <input type="text" id="country" v-model="country" required />
             </div>
-            <button type="submit">Register</button>
+            <button type="submit" class="register-button">Register</button>
         </form>
+        <div class="form-links">
+            <button type="button" @click="goToLogin" class="link-button">Back to Login</button>
+        </div>
     </div>
 </template>
 
@@ -52,10 +56,14 @@ const handleRegister = () => {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 300px;
+    margin: auto;
+    margin-top: 50px;
 }
 
 .register-form h2 {
     margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
 }
 
 .register-form div {
@@ -65,6 +73,7 @@ const handleRegister = () => {
 .register-form label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .register-form input {
@@ -74,16 +83,37 @@ const handleRegister = () => {
     border-radius: 4px;
 }
 
-.register-form button {
+.register-button {
     background-color: #007bff;
     color: #fff;
     border: none;
     padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
-.register-form button:hover {
+.register-button:hover {
     background-color: #0056b3;
+}
+
+.form-links {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 5px;
+}
+
+.link-button:hover {
+    text-decoration: underline;
 }
 </style>

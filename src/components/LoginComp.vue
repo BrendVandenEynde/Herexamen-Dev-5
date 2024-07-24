@@ -7,14 +7,19 @@ const password = ref('');
 const router = useRouter();
 
 const handleLogin = () => {
-  // Simulate a login process (no backend involved for now)
-  // For demonstration, check if username and password are not empty
   if (username.value !== '' && password.value !== '') {
-    // Navigate to the home page after successful login
     router.push({ name: 'Home' });
   } else {
-    alert('Please enter username and password'); // Handle empty fields
+    alert('Please enter username and password');
   }
+};
+
+const goToRegister = () => {
+  router.push({ name: 'Register' });
+};
+
+const goBack = () => {
+  router.push({ name: 'Home' });
 };
 </script>
 
@@ -31,6 +36,9 @@ const handleLogin = () => {
         <input type="password" id="password" v-model="password" required />
       </div>
       <button type="submit" class="login-button">Login</button>
+      <div class="form-links">
+        <button type="button" @click="goToRegister" class="link-button">Register</button>
+      </div>
     </form>
   </div>
 </template>
@@ -82,5 +90,23 @@ const handleLogin = () => {
 
 .login-button:hover {
   background-color: #0056b3;
+}
+
+.form-links {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 5px;
+}
+
+.link-button:hover {
+  text-decoration: underline;
 }
 </style>
