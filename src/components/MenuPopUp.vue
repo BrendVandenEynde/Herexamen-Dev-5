@@ -11,6 +11,10 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    materialOptions: {
+        type: Array,
+        required: true
+    },
     shoeSize: {
         type: Number,
         default: 42
@@ -75,9 +79,9 @@ const selectMaterial = (material) => {
                 <template v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'outside_1' || activeMenu === 'outside_2' || activeMenu === 'sole_1' || activeMenu === 'sole_2'">
                     <h2>Select Material for {{ activeMenu }}</h2>
                     <div class="material-options">
-                        <div class="material-option" @click="selectMaterial('Placeholder Material 1')">Material 1</div>
-                        <div class="material-option" @click="selectMaterial('Placeholder Material 2')">Material 2</div>
-                        <div class="material-option" @click="selectMaterial('Placeholder Material 3')">Material 3</div>
+                        <div v-for="material in materialOptions" :key="material.name" class="material-option" @click="selectMaterial(material.texture)">
+                            {{ material.name }}
+                        </div>
                     </div>
                 </template>
                 <template v-else>

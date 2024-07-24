@@ -34,6 +34,12 @@ const colorOptions = ref([
   '#00008B', // dark blue
 ]); // Define color options
 
+const materialOptions = ref([
+  { name: 'Material 1', texture: '/textures/material1.jpg' },
+  { name: 'Material 2', texture: '/textures/material2.jpg' },
+  { name: 'Material 3', texture: '/textures/material3.jpg' }
+]); // Define material options
+
 const toggleMenu = (circleId) => {
   activeMenu.value = activeMenu.value === circleId ? null : circleId;
 };
@@ -52,6 +58,22 @@ const selectColor = (part, color) => {
     });
   }
   closeMenu(); // Close the menu after selecting a color
+};
+
+const selectMaterial = (part, materialTexture) => {
+  console.log(`Selected material for ${part}:`, materialTexture);
+  if (shoeModel.value) {
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(materialTexture, (texture) => {
+      shoeModel.value.traverse((child) => {
+        if (child.isMesh && child.name === part) {
+          child.material.map = texture;
+          child.material.needsUpdate = true;
+        }
+      });
+    });
+  }
+  closeMenu(); // Close the menu after selecting a material
 };
 
 const initializeThreeJs = () => {
@@ -168,8 +190,17 @@ onMounted(() => {
     <!-- Left sidebar menu -->
     <LeftMenu :circles="circles" :activeMenu="activeMenu" @toggleMenu="toggleMenu" />
     <!-- Dynamic menu content -->
-    <MenuPopUp v-if="activeMenu !== null" :activeMenu="activeMenu" @closeMenu="closeMenu" @selectColor="selectColor"
-      :colorOptions="colorOptions" :shoeSize="shoeSize" @update:shoeSize="shoeSize = $event" />
+    <MenuPopUp 
+      v-if="activeMenu !== null" 
+      :activeMenu="activeMenu" 
+      @closeMenu="closeMenu" 
+      @selectColor="selectColor" 
+      @selectMaterial="selectMaterial" 
+      :colorOptions="colorOptions" 
+      :materialOptions="materialOptions"
+      :shoeSize="shoeSize" 
+      @update:shoeSize="shoeSize = $event" 
+    />
   </div>
 </template>
 
