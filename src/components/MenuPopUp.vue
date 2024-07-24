@@ -83,7 +83,7 @@ const selectMaterial = (materialName) => {
                     </div>
                 </template>
                 <template
-                    v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'outside_1' || activeMenu === 'outside_2' || activeMenu === 'sole_1' || activeMenu === 'sole_2'">
+                    v-if="activeMenu === 'laces' || activeMenu === 'inside' || activeMenu === 'Upper Exterior' || activeMenu === 'Toe Cap' || activeMenu === 'Midsole ' || activeMenu === 'Outsole '">
                     <h2>Select Material for {{ activeMenu }}</h2>
                     <div class="material-options">
                         <div v-for="material in materialOptions" :key="material.name" class="material-option"

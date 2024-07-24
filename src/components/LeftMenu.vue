@@ -17,13 +17,26 @@ const emits = defineEmits(['toggleMenu']);
 const toggleMenu = (circleId) => {
     emits('toggleMenu', circleId);
 };
+
+// Map IDs to display names
+const getDisplayName = (id) => {
+    const names = {
+        'laces': 'Laces',
+        'inside': 'Inner Lining',
+        'outside_1': 'Upper Exterior',
+        'outside_2': 'Toe Cap',
+        'sole_1': 'Midsole',
+        'sole_2': 'Outsole'
+    };
+    return names[id] || id;
+};
 </script>
 
 <template>
     <div class="left-menu">
         <div v-for="circle in circles" :key="circle.id" class="circle" @click="toggleMenu(circle.id)"
             :class="{ active: circle.id === activeMenu }">
-            {{ circle.name }}
+            {{ getDisplayName(circle.id) }}
         </div>
     </div>
 </template>
