@@ -48,7 +48,16 @@ const materialOptions = ref([
       roughness: '/textures/Stylized_Scales_003_roughness.png'
     }
   },
-  { name: 'Material 2', textures: { base: '/textures/material2.jpg' } },
+  {
+    name: 'Fabric Lace',
+    textures: {
+      ao: '/textures/Fabric_Lace_038_ambientOcclusion.png',
+      base: '/textures/Fabric_Lace_038_basecolor.png',
+      normal: '/textures/Fabric_Lace_038_normal.png',
+      roughness: '/textures/Fabric_Lace_038_roughness.png',
+      opacity: '/textures/Fabric_Lace_038_opacity.png'
+    }
+  },
   { name: 'Material 3', textures: { base: '/textures/material3.jpg' } }
 ]);
 
@@ -88,9 +97,9 @@ const selectMaterial = (part, materialTextures) => {
     const textures = {};
     if (materialTextures.ao) textures.aoMap = textureLoader.load(materialTextures.ao);
     if (materialTextures.base) textures.map = textureLoader.load(materialTextures.base);
-    if (materialTextures.height) textures.displacementMap = textureLoader.load(materialTextures.height);
     if (materialTextures.normal) textures.normalMap = textureLoader.load(materialTextures.normal);
     if (materialTextures.roughness) textures.roughnessMap = textureLoader.load(materialTextures.roughness);
+    if (materialTextures.opacity) textures.opacityMap = textureLoader.load(materialTextures.opacity);
 
     shoeModel.value.traverse((child) => {
       if (child.isMesh && child.name === part) {
