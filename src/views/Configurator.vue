@@ -68,6 +68,16 @@ const materialOptions = ref([
       opacity: '/textures/tropic/Fabric_Lace_036_opacity.png'
     }
   },
+  {
+    name: 'Military',
+    textures: {
+      ao: '/textures/military/Fabric_Mesh_Military_001_ambientOcclusion.jpg',
+      base: '/textures/military/Fabric_Mesh_Military_001_basecolor.jpg',
+      normal: '/textures/military/Fabric_Mesh_Military_001_normal.jpg',
+      opacity: '/textures/military/Fabric_Mesh_Military_001_opacity.jpg',
+      roughness: '/textures/military/Fabric_Mesh_Military_001_roughness.jpg'
+    }
+  },
   { name: 'Material 3', textures: { base: '/textures/material3.jpg' } }
 ]);
 
@@ -110,6 +120,7 @@ const selectMaterial = (part, materialTextures) => {
     if (materialTextures.normal) textures.normalMap = textureLoader.load(materialTextures.normal);
     if (materialTextures.roughness) textures.roughnessMap = textureLoader.load(materialTextures.roughness);
     if (materialTextures.opacity) textures.opacityMap = textureLoader.load(materialTextures.opacity);
+    if (materialTextures.height) textures.displacementMap = textureLoader.load(materialTextures.height);
 
     shoeModel.value.traverse((child) => {
       if (child.isMesh && child.name === part) {
