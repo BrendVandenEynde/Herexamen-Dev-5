@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import Navbar from '../components/NavBar.vue';
 import LeftMenu from '../components/LeftMenu.vue';
 import MenuPopUp from '../components/MenuPopUp.vue';
 
@@ -247,7 +246,6 @@ onMounted(() => {
 
 <template>
   <div id="app-container">
-    <Navbar />
     <div id="threejs-container"></div>
     <LeftMenu :circles="circles" :activeMenu="activeMenu" @toggleMenu="toggleMenu" />
     <MenuPopUp v-if="activeMenu !== null" :activeMenu="activeMenu" @closeMenu="closeMenu" @selectColor="selectColor"
