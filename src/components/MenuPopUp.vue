@@ -21,7 +21,7 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(['closeMenu', 'selectColor', 'selectMaterial', 'update:shoeSize']);
+const emits = defineEmits(['closeMenu', 'selectColor', 'selectMaterial', 'update:shoeSize', 'selectJewelry']);
 
 // Define size limits
 const MIN_EU_SIZE = 35; // Minimum EU size
@@ -69,6 +69,11 @@ const selectMaterial = (materialName) => {
         console.error(`Material ${materialName} not found`);
     }
 };
+
+// Emit selectJewelry event
+const selectJewelry = (jewelryOption) => {
+    emits('selectJewelry', props.activeMenu, jewelryOption);
+};
 </script>
 
 <template>
@@ -84,9 +89,9 @@ const selectMaterial = (materialName) => {
                     </div>
                 </template>
 
-                <!-- Inside, Upper Exterior, Outside-1, Midsole, Sole_1, Sole_2, Outsole -->
+                <!-- Inside, Upper Exterior, Outside-1, Midsoule, Sole_1, Sole_2, Outsoule -->
                 <template
-                    v-else-if="['inside', 'outside_1', 'upper_exterior', 'midsoule', 'sole_1', 'sole_2', 'outsoule', 'jewelry'].includes(activeMenu)">
+                    v-else-if="['inside', 'outside_1', 'upper_exterior', 'midsoule', 'sole_1', 'sole_2', 'outsoule'].includes(activeMenu)">
                     <h2>Select {{ ['inside', 'upper_exterior'].includes(activeMenu) ? 'Color and Material' : 'Material'
                         }} for {{ activeMenu }}</h2>
                     <div class="color-options">
@@ -98,6 +103,16 @@ const selectMaterial = (materialName) => {
                             @click="selectMaterial(material.name)">
                             {{ material.name }}
                         </div>
+                    </div>
+                </template>
+
+                <!-- Jewelry -->
+                <template v-else-if="activeMenu === 'jewelry'">
+                    <h2>Select Jewelry</h2>
+                    <div class="jewelry-options">
+                        <div class="jewelry-option" @click="selectJewelry('jewelry1')">Jewelry 1</div>
+                        <div class="jewelry-option" @click="selectJewelry('jewelry2')">Jewelry 2</div>
+                        <div class="jewelry-option" @click="selectJewelry('jewelry3')">Jewelry 3</div>
                     </div>
                 </template>
 
@@ -155,7 +170,8 @@ const selectMaterial = (materialName) => {
 }
 
 .color-options,
-.material-options {
+.material-options,
+.jewelry-options {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -163,7 +179,8 @@ const selectMaterial = (materialName) => {
 }
 
 .color-option,
-.material-option {
+.material-option,
+.jewelry-option {
     width: 30px;
     height: 30px;
     margin: 5px;
@@ -175,8 +192,17 @@ const selectMaterial = (materialName) => {
 }
 
 .color-option:hover,
-.material-option:hover {
+.material-option:hover,
+.jewelry-option:hover {
     transform: scale(1.1);
+}
+
+.jewelry-option {
+    background-color: #ccc;
+    /* Placeholder styling for jewelry options */
+    width: auto;
+    padding: 10px;
+    border-radius: 4px;
 }
 
 .size-options {

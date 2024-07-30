@@ -48,11 +48,11 @@ const getDisplayName = (id) => {
         'outside_1': 'Upper Exterior',
         'sole_1': 'Midsole',
         'sole_2': 'Outsole',
-        'jewelry': 'Jewelry' 
+        'jewelry': 'Jewelry',
+        'options': 'Options'
     };
     return names[id] || id;
 };
-
 </script>
 
 <template>
@@ -99,7 +99,8 @@ const getDisplayName = (id) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Space between top and bottom elements */
+    justify-content: space-between;
+    /* Space between top and bottom elements */
     z-index: 3;
 }
 
@@ -122,7 +123,8 @@ const getDisplayName = (id) => {
 }
 
 .back-button {
-    margin-bottom: 20px; /* Space below the back button */
+    margin-bottom: 20px;
+    /* Space below the back button */
 }
 
 .shoe-options {
@@ -153,7 +155,8 @@ const getDisplayName = (id) => {
 }
 
 .confirm-button {
-    margin-top: 20px; /* Space above the confirm button */
+    margin-top: 20px;
+    /* Space above the confirm button */
 }
 
 /* Popup styles */
