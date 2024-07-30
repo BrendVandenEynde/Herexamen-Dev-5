@@ -14,10 +14,9 @@ const circles = ref([
   { id: 'outside_1', name: 'Outside 1' },
   { id: 'sole_1', name: 'Sole 1' },
   { id: 'sole_2', name: 'Sole 2' },
-  { id: 'jewelry', name: 'Jewelry' }, 
+  { id: 'jewelry', name: 'Jewelry' },
   { id: 'options', name: 'Options' }
 ]);
-
 
 const activeMenu = ref(null);
 const shoeModel = ref(null);
@@ -177,6 +176,7 @@ const initializeThreeJs = () => {
     console.log('Model loaded:', model);
     model.position.set(0, 1, 0);
     model.scale.set(1, 1, 1);
+
     scene.add(model);
 
     shoeModel.value = model;
@@ -218,18 +218,26 @@ const initializeThreeJs = () => {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
+  controls.enablePan = false;
   controls.screenSpacePanning = false;
-  controls.minDistance = 2;
-  controls.maxDistance = 10;
 
-  camera.position.z = 5;
+  // Disable zooming by setting minDistance and maxDistance to the same value
+  const fixedDistance = 5; // Set this to the desired zoom distance
+  controls.minDistance = fixedDistance;
+  controls.maxDistance = fixedDistance;
+
+  // Restrict vertical camera movement
+  controls.maxPolarAngle = Math.PI / 2; // Limit camera's vertical movement to 90 degrees (looking only up and down)
+  controls.minPolarAngle = 0; // Ensure camera cannot go below the horizontal plane
+
+  camera.position.z = fixedDistance;
 
   const animate = function () {
     requestAnimationFrame(animate);
 
+    // Slowly rotate the shoe model
     if (shoeModel.value) {
-      shoeModel.value.rotation.x += 0.01;
-      shoeModel.value.rotation.y += 0.01;
+      shoeModel.value.rotation.y += 0.001; // Adjust this value for rotation speed
     }
 
     controls.update();
