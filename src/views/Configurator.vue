@@ -169,7 +169,6 @@ const initializeThreeJs = () => {
   directionalLight1.position.set(1, 1, 1).normalize();
   scene.add(directionalLight1);
 
-  // Add the second directional light on the opposite diagonal
   const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight2.position.set(-1, -1, -1).normalize();
   scene.add(directionalLight2);
@@ -196,9 +195,15 @@ const initializeThreeJs = () => {
     console.error('An error occurred while loading the model:', error);
   });
 
-  // Create a rounded square platform
+  // Create a rounded square platform with reflective material
   const platformGeometry = new THREE.ExtrudeGeometry(createRoundedSquare(1.5, 0.2), { depth: 0.2, bevelEnabled: false });
-  const platformMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
+  const platformMaterial = new THREE.MeshStandardMaterial({
+    color: 0x888888, // Adjust color if needed
+    metalness: 1.0,  // High metalness for reflectivity
+    roughness: 0.1,  // Low roughness for a smooth, mirror-like finish
+    envMap: skyboxTexture, // Use skybox texture as environment map
+    envMapIntensity: 1.0  // Adjust intensity if needed
+  });
   const platform = new THREE.Mesh(platformGeometry, platformMaterial);
   platform.rotation.x = -Math.PI / 2;
   platform.position.y = -1;
