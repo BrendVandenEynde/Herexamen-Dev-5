@@ -12,11 +12,12 @@ const circles = ref([
   { id: 'laces', name: 'Laces' },
   { id: 'inside', name: 'Inside' },
   { id: 'outside_1', name: 'Outside 1' },
-  { id: 'outside_2', name: 'Outside 2' },
   { id: 'sole_1', name: 'Sole 1' },
   { id: 'sole_2', name: 'Sole 2' },
+  { id: 'jewelry', name: 'Jewelry' }, 
   { id: 'options', name: 'Options' }
 ]);
+
 
 const activeMenu = ref(null);
 const shoeModel = ref(null);

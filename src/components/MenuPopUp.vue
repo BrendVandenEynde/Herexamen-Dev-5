@@ -84,9 +84,9 @@ const selectMaterial = (materialName) => {
                     </div>
                 </template>
 
-                <!-- Inside, Upper Exterior, Outside-1, Midsoule, Sole_1, Sole_2, Outsoule -->
+                <!-- Inside, Upper Exterior, Outside-1, Midsole, Sole_1, Sole_2, Outsole -->
                 <template
-                    v-else-if="['inside', 'outside_1', 'upper_exterior', 'midsoule', 'sole_1', 'sole_2', 'outsoule'].includes(activeMenu)">
+                    v-else-if="['inside', 'outside_1', 'upper_exterior', 'midsoule', 'sole_1', 'sole_2', 'outsoule', 'jewelry'].includes(activeMenu)">
                     <h2>Select {{ ['inside', 'upper_exterior'].includes(activeMenu) ? 'Color and Material' : 'Material'
                         }} for {{ activeMenu }}</h2>
                     <div class="color-options">

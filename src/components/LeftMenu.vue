@@ -47,10 +47,12 @@ const getDisplayName = (id) => {
         'inside': 'Inner Lining',
         'outside_1': 'Upper Exterior',
         'sole_1': 'Midsole',
-        'sole_2': 'Outsole'
+        'sole_2': 'Outsole',
+        'jewelry': 'Jewelry' 
     };
     return names[id] || id;
 };
+
 </script>
 
 <template>
