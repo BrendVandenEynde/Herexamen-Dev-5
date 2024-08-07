@@ -1,23 +1,33 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const name = ref('');
-const email = ref('');
-const password = ref('');
-const country = ref('');
-const router = useRouter();
-
-const handleRegister = () => {
+const handleRegister = async () => {
     if (name.value !== '' && email.value !== '' && password.value !== '' && country.value !== '') {
-        router.push({ name: 'Home' });
+        try {
+            const response = await fetch('http://your-backend-url/api/v1/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name.value,
+                    email: email.value,
+                    password: password.value,
+                    country: country.value
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                // Save token and redirect to home
+                localStorage.setItem('token', data.token);
+                router.push({ name: 'Home' });
+            } else {
+                alert(data.msg);
+            }
+        } catch (error) {
+            alert('Error registering user');
+        }
     } else {
         alert('Please fill in all fields');
     }
-};
-
-const goToLogin = () => {
-    router.push({ name: 'Login' });
 };
 </script>
 
