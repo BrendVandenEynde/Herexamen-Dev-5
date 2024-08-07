@@ -1,25 +1,31 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const username = ref('');
-const password = ref('');
-const router = useRouter();
-
-const handleLogin = () => {
-  if (username.value !== '' && password.value !== '') {
-    router.push({ name: 'Home' });
-  } else {
-    alert('Please enter username and password');
-  }
-};
-
-const goToRegister = () => {
-  router.push({ name: 'Register' });
-};
-
-const goBack = () => {
-  router.push({ name: 'Home' });
+const handleLogin = async () => {
+    if (username.value !== '' && password.value !== '') {
+        try {
+            const response = await fetch('http://your-backend-url/api/v1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: username.value,
+                    password: password.value
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                // Save token and redirect to home
+                localStorage.setItem('token', data.token);
+                router.push({ name: 'Home' });
+            } else {
+                alert(data.msg);
+            }
+        } catch (error) {
+            alert('Error logging in user');
+        }
+    } else {
+        alert('Please enter username and password');
+    }
 };
 </script>
 
