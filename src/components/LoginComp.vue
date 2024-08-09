@@ -1,31 +1,39 @@
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const username = ref('');
+const password = ref('');
+const router = useRouter();
+
 const handleLogin = async () => {
-    if (username.value !== '' && password.value !== '') {
-        try {
-            const response = await fetch('http://your-backend-url/api/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: username.value,
-                    password: password.value
-                })
-            });
-            const data = await response.json();
-            if (response.ok) {
-                // Save token and redirect to home
-                localStorage.setItem('token', data.token);
-                router.push({ name: 'Home' });
-            } else {
-                alert(data.msg);
-            }
-        } catch (error) {
-            alert('Error logging in user');
-        }
-    } else {
-        alert('Please enter username and password');
+  if (username.value && password.value) {
+    try {
+      const response = await fetch('http://localhost:5000/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: username.value,
+          password: password.value
+        })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        // Save token and redirect to home
+        localStorage.setItem('token', data.token);
+        router.push({ name: 'Home' });
+      } else {
+        // Display detailed error message
+        alert(data.msg || 'Error logging in user');
+      }
+    } catch (error) {
+      alert('Error logging in user');
     }
+  } else {
+    alert('Please enter username and password');
+  }
 };
 </script>
 
@@ -43,7 +51,7 @@ const handleLogin = async () => {
       </div>
       <button type="submit" class="login-button">Login</button>
       <div class="form-links">
-        <button type="button" @click="goToRegister" class="link-button">Register</button>
+        <button type="button" @click="router.push({ name: 'Register' })" class="link-button">Register</button>
       </div>
     </form>
   </div>
