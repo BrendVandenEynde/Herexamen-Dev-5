@@ -2,11 +2,15 @@
 import { useRouter } from 'vue-router';
 import Button from '../components/Button.vue';
 
+const router = useRouter();
+
 const handleLogout = () => {
+    // Remove token from localStorage
+    localStorage.removeItem('token');
+
+    // Redirect to login page
     router.push({ name: 'Login' });
 };
-
-const router = useRouter();
 </script>
 
 <template>
