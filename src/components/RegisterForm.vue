@@ -1,8 +1,17 @@
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const name = ref('');
+const email = ref('');
+const password = ref('');
+const country = ref('');
+const router = useRouter();
+
 const handleRegister = async () => {
-    if (name.value !== '' && email.value !== '' && password.value !== '' && country.value !== '') {
+    if (name.value && email.value && password.value && country.value) {
         try {
-            const response = await fetch('http://your-backend-url/api/v1/auth/register', {
+            const response = await fetch('http://localhost:5000/api/v1/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -20,7 +29,8 @@ const handleRegister = async () => {
                 localStorage.setItem('token', data.token);
                 router.push({ name: 'Home' });
             } else {
-                alert(data.msg);
+                // Display detailed error message
+                alert(data.msg || 'Error registering user');
             }
         } catch (error) {
             alert('Error registering user');
@@ -54,7 +64,7 @@ const handleRegister = async () => {
             <button type="submit" class="register-button">Register</button>
         </form>
         <div class="form-links">
-            <button type="button" @click="goToLogin" class="link-button">Back to Login</button>
+            <button type="button" @click="router.push({ name: 'Login' })" class="link-button">Back to Login</button>
         </div>
     </div>
 </template>
