@@ -19,10 +19,13 @@ const handleLogin = async () => {
           password: password.value
         })
       });
+
       const data = await response.json();
+
       if (response.ok) {
-        // Save token and redirect to home
+        // Save token and username in local storage
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userName', data.name); // Save username
         router.push({ name: 'Home' });
       } else {
         // Display detailed error message
