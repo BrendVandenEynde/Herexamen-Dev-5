@@ -45,7 +45,7 @@ const handleLogin = async () => {
     <h2>Login</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
-        <label for="username">Username:</label>
+        <label for="username">E-mail:</label>
         <input type="text" id="username" v-model="username" required />
       </div>
       <div class="form-group">
@@ -87,7 +87,7 @@ const handleLogin = async () => {
 }
 
 .form-group input {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
