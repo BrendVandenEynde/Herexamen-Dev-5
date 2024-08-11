@@ -16,7 +16,7 @@ const handleLogout = () => {
 <template>
     <nav>
         <ul>
-            <li><router-link to="/">Home</router-link></li>
+            <li><router-link to="/home">Home</router-link></li>
             <li><router-link to="/configurator">Configurator</router-link></li>
             <li><router-link to="/basket">Basket</router-link></li>
             <li><router-link to="/orderlist">Order List</router-link></li>

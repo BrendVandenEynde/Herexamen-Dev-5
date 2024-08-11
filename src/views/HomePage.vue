@@ -1,6 +1,6 @@
 <script setup>
 import HomeComp from '../components/HomeComp.vue';
-import Navbar from '../components/NavBar.vue';
+import Navbar from '../components/Navbar.vue';
 </script>
 
 <template>
