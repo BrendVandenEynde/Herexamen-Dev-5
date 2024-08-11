@@ -62,7 +62,7 @@ const getDisplayName = (id) => {
             Back to Homepage
         </div>
 
-        <!-- Existing shoe options (not touched) -->
+        <!-- Existing shoe options -->
         <div class="shoe-options">
             <div v-for="circle in circles" :key="circle.id" class="circle" @click="toggleMenu(circle.id)"
                 :class="{ active: circle.id === activeMenu }">
@@ -80,8 +80,10 @@ const getDisplayName = (id) => {
             <div v-if="showPopup" class="popup-overlay">
                 <div class="popup-content">
                     <h3>Do you really want to cancel the configuration?</h3>
-                    <button @click="confirmCancel">Yes</button>
-                    <button @click="cancelCancel">No</button>
+                    <div class="popup-buttons">
+                        <button @click="confirmCancel">Yes</button>
+                        <button @click="cancelCancel">No</button>
+                    </div>
                 </div>
             </div>
         </transition>
@@ -93,22 +95,22 @@ const getDisplayName = (id) => {
     position: fixed;
     top: 0;
     left: 0;
-    width: 60px;
+    width: 100px;
     height: 100%;
-    background-color: #333;
+    background-color: #000;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    /* Space between top and bottom elements */
     z-index: 3;
+    color: #fff;
 }
 
 .menu-option {
-    width: 100%;
-    height: 40px;
-    background-color: #fff;
-    color: #333;
+    width: 80%;
+    height: 35px;
+    background-color: #333;
+    color: #fff;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -116,47 +118,51 @@ const getDisplayName = (id) => {
     cursor: pointer;
     transition: background-color 0.3s;
     text-align: center;
+    font-size: 0.75rem;
 }
 
 .menu-option:hover {
-    background-color: #c2f703;
+    background-color: #555;
 }
 
 .back-button {
-    margin-bottom: 20px;
-    /* Space below the back button */
+    margin-top: 20px;
 }
 
 .shoe-options {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 20px 0;
 }
 
 .circle {
-    width: 40px;
-    height: 40px;
-    margin: 10px 0;
+    width: 35px;
+    height: 35px;
+    margin: 8px 0;
     background-color: #fff;
+    color: #000;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 0.65rem;
 }
 
 .circle:hover {
-    background-color: #c2f703;
+    background-color: #555;
+    color: #fff;
 }
 
 .active {
-    background-color: #ff0000;
+    background-color: #69FF47;
+    color: #fff;
 }
 
 .confirm-button {
-    margin-top: 20px;
-    /* Space above the confirm button */
+    margin-bottom: 20px;
 }
 
 /* Popup styles */
@@ -175,21 +181,26 @@ const getDisplayName = (id) => {
 
 .popup-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 250px;
     text-align: center;
+}
+
+.popup-buttons {
+    margin-top: 10px;
 }
 
 .popup-content button {
     background-color: #007bff;
     color: #fff;
     border: none;
-    padding: 10px 15px;
+    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
     margin: 5px;
+    font-size: 0.75rem;
 }
 
 .popup-content button:hover {
@@ -197,6 +208,6 @@ const getDisplayName = (id) => {
 }
 
 .popup-content h3 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 </style>
