@@ -56,19 +56,21 @@ nav {
 
 .logo img {
     height: 50px;
-    width: 200px;
+    width: auto;
 }
 
 .nav-links {
     list-style-type: none;
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-right: 3%;
     padding: 0;
+    align-items: center;
 }
 
-li {
-    margin: 0;
+.nav-links li {
+    display: flex;
+    align-items: center;
 }
 
 a {
@@ -79,6 +81,8 @@ a {
     padding: 0.5rem 1rem;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
 }
 
 a:hover {
@@ -94,6 +98,8 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
 }
 
 button:hover {
