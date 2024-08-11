@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Button from '../components/Button.vue';
 
 const name = ref('');
 const email = ref('');
@@ -45,39 +46,43 @@ const handleRegister = async () => {
     <div class="register-form">
         <h2>Register</h2>
         <form @submit.prevent="handleRegister">
-            <div>
+            <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" v-model="name" required />
+                <input type="text" id="name" v-model="name" placeholder="Name" required />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" required />
+                <input type="email" id="email" v-model="email" placeholder="Email" required />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" required />
+                <input type="password" id="password" v-model="password" placeholder="Password" required />
             </div>
-            <div>
+            <div class="form-group">
                 <label for="country">Country:</label>
-                <input type="text" id="country" v-model="country" required />
+                <input type="text" id="country" v-model="country" placeholder="Country" required />
             </div>
-            <button type="submit" class="register-button">Register</button>
+            <!-- Apply the 'register' type to the Register button -->
+            <Button type="register" class="full-width">Register</Button>
+            <div class="form-links">
+                <!-- Apply the 'login' type to the Back to Login button -->
+                <Button type="login" class="full-width" @click="router.push({ name: 'Login' })">Back to Login</Button>
+            </div>
         </form>
-        <div class="form-links">
-            <button type="button" @click="router.push({ name: 'Login' })" class="link-button">Back to Login</button>
-        </div>
     </div>
 </template>
 
 <style scoped>
 .register-form {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffffE8;
     padding: 20px;
-    width: 300px;
-    margin: auto;
-    margin-top: 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .register-form h2 {
@@ -86,54 +91,31 @@ const handleRegister = async () => {
     text-align: center;
 }
 
-.register-form div {
+.form-group {
     margin-bottom: 15px;
 }
 
-.register-form label {
+.form-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-.register-form input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.form-group input {
+    width: 94%;
+    padding: 10px;
+    border: 2px solid #000000;
 }
 
-.register-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
+.full-width {
     width: 100%;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-.register-button:hover {
-    background-color: #0056b3;
 }
 
 .form-links {
-    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
     text-align: center;
-}
-
-.link-button {
-    background: none;
-    border: none;
-    color: #007bff;
-    cursor: pointer;
-    font-size: 14px;
-    margin: 5px;
-}
-
-.link-button:hover {
-    text-decoration: underline;
 }
 </style>
