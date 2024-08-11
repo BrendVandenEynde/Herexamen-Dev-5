@@ -1,18 +1,29 @@
 <script setup>
-const order = {
-    id: 1,
-    image: 'https://placehold.co/500x250', // Placeholder image URL
-    datetime: 'June 30, 2024 13:00 PM' // Example date and time
-};
+import { ref } from 'vue';
+import OrderPopUp from './OrderPopUp.vue';
 
-const orderDateTime = order.datetime;
+const props = defineProps({
+    order: {
+        type: Object,
+        required: true
+    }
+});
+
+const showPopup = ref(false);
 
 const showDetails = () => {
-    // Implement function to show order details
+    showPopup.value = true;
 };
 
-const editOrder = () => {
-    // Implement function to edit order
+const closePopup = () => {
+    showPopup.value = false;
+};
+
+const order = {
+    title: 'Sample Item',
+    description: 'This is a detailed description of the item.',
+    price: 29.99,
+    ...props.order
 };
 </script>
 
@@ -21,12 +32,14 @@ const editOrder = () => {
         <img :src="order.image" alt="Basket Item Image" class="basket-image" />
 
         <div class="order-details">
-            <p>{{ orderDateTime }}</p>
+            <p>{{ order.datetime }}</p>
             <div class="button-container">
                 <button @click="showDetails">Details</button>
-                <button @click="editOrder">Edit Order</button>
+                <button @click="removeOrder">Remove order </button>
             </div>
         </div>
+
+        <OrderPopUp v-if="showPopup" :order="order" @close="closePopup" />
     </div>
 </template>
 
@@ -39,13 +52,11 @@ const editOrder = () => {
     padding: 1rem;
     margin-bottom: 1rem;
     max-width: 300px;
-    /* Adjust as needed */
 }
 
 .basket-image {
     width: 100%;
     max-height: 200px;
-    /* Adjust as needed */
     object-fit: cover;
 }
 
