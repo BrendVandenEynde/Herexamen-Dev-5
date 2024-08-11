@@ -1,12 +1,17 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import OrderPopUp from './OrderPopUp.vue';
-import Button from './Button.vue'; // Import the Button component
+import Button from './Button.vue';
 
 const props = defineProps({
     order: {
         type: Object,
         required: true
+    },
+    variant: {
+        type: String,
+        default: 'list',  // 'list' or 'basket'
+        validator: (value) => ['list', 'basket'].includes(value)
     }
 });
 
@@ -21,13 +26,15 @@ const closePopup = () => {
 };
 
 const confirmOrder = () => {
-    // Implement order confirmation logic here
     alert('Order confirmed!');
 };
 
 const removeOrder = () => {
-    // Implement order removal logic here
     alert('Order removed!');
+};
+
+const cancelOrder = () => {
+    alert('Order canceled!');
 };
 
 const order = {
@@ -47,8 +54,13 @@ const order = {
             <p class="datetime">{{ order.datetime }}</p>
             <Button type="details" @click="showDetails">Details</Button>
             <div class="button-container">
-                <Button type="confirm" @click="confirmOrder">Confirm</Button>
-                <Button type="remove" @click="removeOrder">Remove</Button>
+                <template v-if="variant === 'basket'">
+                    <Button type="confirm" @click="confirmOrder">Confirm</Button>
+                    <Button type="remove" @click="removeOrder">Remove</Button>
+                </template>
+                <template v-else>
+                    <Button type="cancel" @click="cancelOrder">Cancel Order</Button>
+                </template>
             </div>
         </div>
 

@@ -11,7 +11,7 @@ const props = defineProps({
   type: {
     type: String,
     default: 'default',
-    validator: (value) => ['log-out', 'details', 'confirm', 'remove', 'default', 'login', 'register'].includes(value)
+    validator: (value) => ['log-out', 'details', 'confirm', 'remove', 'cancel', 'default', 'login', 'register'].includes(value)
   }
 });
 
@@ -43,12 +43,17 @@ button {
 }
 
 .btn-confirm {
-  background-color: #28a745; 
+  background-color: #28a745;
   color: white;
 }
 
 .btn-remove {
-  background-color: #dc3545; 
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #ff7f07;
   color: white;
 }
 
@@ -58,7 +63,7 @@ button {
 }
 
 .btn-login {
-  background-color: #69FF47; 
+  background-color: #69FF47;
   color: white;
 }
 

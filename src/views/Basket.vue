@@ -14,7 +14,7 @@ const basketItems = [
         <Navbar />
         <h2>Basket Page</h2>
         <div class="basket-cards">
-            <BasketCard v-for="item in basketItems" :key="item.id" :order="item" />
+            <BasketCard v-for="item in basketItems" :key="item.id" :order="item" variant="basket" />
         </div>
     </div>
 </template>

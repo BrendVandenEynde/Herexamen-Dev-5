@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '../components/NavBar.vue';
-import OrderCard from '../components/OrderCard.vue';
+import BasketCard from '../components/BasketCard.vue'; // Update import to BasketCard
 
 // Mock orders data for demonstration
 const orders = [
@@ -15,7 +15,7 @@ const orders = [
     <Navbar />
     <h2>Order List</h2>
     <div class="order-cards">
-      <OrderCard v-for="order in orders" :key="order.id" :order="order" />
+      <BasketCard v-for="order in orders" :key="order.id" :order="order" />
     </div>
   </div>
 </template>
