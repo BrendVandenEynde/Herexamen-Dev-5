@@ -53,9 +53,9 @@ const handleLogin = async () => {
         <label for="password">Password:</label>
         <input type="password" id="password" v-model="password" placeholder="Password" required />
       </div>
-      <Button type="login" @click="handleLogin">Login</Button>
+      <Button type="login" class="full-width" @click="handleLogin">Login</Button>
       <div class="form-links">
-        <Button type="register" @click="router.push({ name: 'Register' })">Register</Button>
+        <Button type="register" class="full-width" @click="router.push({ name: 'Register' })">Register</Button>
       </div>
     </form>
   </div>
@@ -69,6 +69,9 @@ const handleLogin = async () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .login-form h2 {
@@ -88,12 +91,19 @@ const handleLogin = async () => {
 }
 
 .form-group input {
-  width: 95%;
+  width: 94%;
   padding: 10px;
   border: 2px solid #000000;
 }
 
+.full-width {
+  width: 100%;
+}
+
 .form-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 10px;
   text-align: center;
 }
