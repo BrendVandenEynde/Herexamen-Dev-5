@@ -47,11 +47,11 @@ const handleLogin = async () => {
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <label for="username">E-mail:</label>
-        <input type="text" id="username" v-model="username" required />
+        <input type="text" id="username" v-model="username" placeholder="E-mail" required />
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required />
+        <input type="password" id="password" v-model="password" placeholder="Password" required />
       </div>
       <Button type="login" @click="handleLogin">Login</Button>
       <div class="form-links">
@@ -90,8 +90,7 @@ const handleLogin = async () => {
 .form-group input {
   width: 95%;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid #000000;
 }
 
 .form-links {
