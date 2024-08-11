@@ -10,7 +10,7 @@ const basketItems = [
 </script>
 
 <template>
-    <div>
+    <div class="basket-page">
         <Navbar />
         <h2>Basket Page</h2>
         <div class="basket-cards">
@@ -20,9 +20,17 @@ const basketItems = [
 </template>
 
 <style scoped>
+.basket-page {
+    overflow-x: hidden;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
 .basket-cards {
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    width: 100%;
+    box-sizing: border-box;
 }
 </style>
