@@ -17,27 +17,36 @@ const emits = defineEmits(['toggleMenu']);
 
 const router = useRouter();
 const showPopup = ref(false);
+const isConfirmation = ref(false); // To distinguish between different confirmation dialogs
 
 const toggleMenu = (circleId) => {
     emits('toggleMenu', circleId);
 };
 
 const goBackToHomepage = () => {
-    showPopup.value = true;
+    isConfirmation.value = true; // Set confirmation flag for back to homepage
+    showPopup.value = true; // Show the popup
 };
 
 const confirmCancel = () => {
-    showPopup.value = false;
-    router.push({ name: 'Home' });
+    showPopup.value = false; // Hide the popup
+    router.push({ name: 'Home' }); // Navigate to the homepage
 };
 
 const cancelCancel = () => {
-    showPopup.value = false;
+    showPopup.value = false; // Hide the popup
+    isConfirmation.value = false; // Reset confirmation flag
 };
 
 const confirmConfiguration = () => {
-    // Implement the logic to confirm configuration
-    alert('Configuration confirmed!');
+    isConfirmation.value = false; // Reset confirmation flag for configuration
+    showPopup.value = true; // Show the popup
+};
+
+// Handle confirmation and redirect to basket
+const handleConfirmConfiguration = () => {
+    showPopup.value = false; // Hide the popup
+    router.push({ name: 'Basket' }); // Navigate to the basket
 };
 
 // Map IDs to display names
@@ -57,7 +66,7 @@ const getDisplayName = (id) => {
 
 <template>
     <div class="left-menu">
-        <!-- New "Back to Homepage" button at the top -->
+        <!-- "Back to Homepage" button -->
         <div class="menu-option back-button" @click="goBackToHomepage">
             Back to Homepage
         </div>
@@ -70,7 +79,7 @@ const getDisplayName = (id) => {
             </div>
         </div>
 
-        <!-- New "Confirm Configuration" button at the bottom -->
+        <!-- "Confirm Configuration" button -->
         <div class="menu-option confirm-button" @click="confirmConfiguration">
             Confirm Configuration
         </div>
@@ -79,10 +88,17 @@ const getDisplayName = (id) => {
         <transition name="popup">
             <div v-if="showPopup" class="popup-overlay">
                 <div class="popup-content">
-                    <h3>Do you really want to cancel the configuration?</h3>
+                    <h3 v-if="!isConfirmation">Do you really want to confirm the configuration and go to the basket?
+                    </h3>
+                    <h3 v-else>Do you really want to cancel the configuration and go back to the homepage?</h3>
                     <div class="popup-buttons">
-                        <button @click="confirmCancel">Yes</button>
-                        <button @click="cancelCancel">No</button>
+                        <!-- Configuration confirmation buttons -->
+                        <button v-if="!isConfirmation" @click="handleConfirmConfiguration">Yes</button>
+                        <button v-if="!isConfirmation" @click="cancelCancel">No</button>
+
+                        <!-- Back to homepage confirmation buttons -->
+                        <button v-if="isConfirmation" @click="confirmCancel">Yes</button>
+                        <button v-if="isConfirmation" @click="cancelCancel">No</button>
                     </div>
                 </div>
             </div>
@@ -180,7 +196,7 @@ const getDisplayName = (id) => {
 }
 
 .popup-content {
-    background-color: #fff;
+    background-color: #000000;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
