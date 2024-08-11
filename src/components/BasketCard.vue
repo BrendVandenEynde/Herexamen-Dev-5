@@ -61,7 +61,7 @@ const order = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid #ddd;
+    border: 2px solid #000000;
     border-radius: 8px;
     overflow: hidden;
     padding: 1rem;
@@ -80,7 +80,7 @@ const order = {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 2px solid #000000;
 }
 
 .order-info {
