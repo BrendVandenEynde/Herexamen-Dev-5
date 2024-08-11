@@ -1,5 +1,5 @@
 <script setup>
-import Navbar from '../components/Navbar.vue';
+import Navbar from '../components/NavBar.vue';
 import OrderCard from '../components/OrderCard.vue';
 
 // Mock orders data for demonstration

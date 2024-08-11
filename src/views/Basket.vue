@@ -1,5 +1,5 @@
 <script setup>
-import Navbar from '../components/Navbar.vue';
+import Navbar from '../components/NavBar.vue';
 import BasketCard from '../components/BasketCard.vue';
 
 // Mock basket items for demonstration
