@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Button from '../components/Button.vue';
 
 const username = ref('');
 const password = ref('');
@@ -52,9 +53,9 @@ const handleLogin = async () => {
         <label for="password">Password:</label>
         <input type="password" id="password" v-model="password" required />
       </div>
-      <button type="submit" class="login-button">Login</button>
+      <Button type="login" @click="handleLogin">Login</Button>
       <div class="form-links">
-        <button type="button" @click="router.push({ name: 'Register' })" class="link-button">Register</button>
+        <Button type="register" @click="router.push({ name: 'Register' })">Register</Button>
       </div>
     </form>
   </div>
@@ -62,7 +63,7 @@ const handleLogin = async () => {
 
 <style scoped>
 .login-form {
-  background-color: #fff;
+  background-color: #ffffffE8;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -93,37 +94,8 @@ const handleLogin = async () => {
   border-radius: 4px;
 }
 
-.login-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-  background-color: #0056b3;
-}
-
 .form-links {
   margin-top: 10px;
   text-align: center;
-}
-
-.link-button {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 14px;
-  margin: 5px;
-}
-
-.link-button:hover {
-  text-decoration: underline;
 }
 </style>
