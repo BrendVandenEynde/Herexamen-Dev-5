@@ -32,7 +32,7 @@ const handleLogout = () => {
 
 <style scoped>
 nav {
-    background-color: #ffffff;
+    background-color: #69FF47;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0.5rem 2rem;
     position: sticky;
@@ -76,7 +76,7 @@ nav {
 a {
     text-decoration: none;
     color: #333;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 1rem;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -86,8 +86,8 @@ a {
 }
 
 a:hover {
-    background-color: #007bff;
-    color: white;
+    background-color: #ffffffE8;
+    color: rgb(0, 0, 0);
 }
 
 button {
