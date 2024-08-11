@@ -50,12 +50,12 @@ button {
 }
 
 .btn-login {
-  background-color: #28a745; 
+  background-color: #69FF47; 
   color: white;
 }
 
 .btn-register {
-  background-color: #17a2b8;
+  background-color: #000000;
   color: white;
 }
 
