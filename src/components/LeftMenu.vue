@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps, defineEmits, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Button from './Button.vue'; // Import the Button component
 
 const props = defineProps({
     circles: {
@@ -67,9 +68,9 @@ const getDisplayName = (id) => {
 <template>
     <div class="left-menu">
         <!-- "Back to Homepage" button -->
-        <div class="menu-option back-button" @click="goBackToHomepage">
+        <Button type="back-home" @click="goBackToHomepage">
             Back to Homepage
-        </div>
+        </Button>
 
         <!-- Existing shoe options -->
         <div class="shoe-options">
@@ -80,9 +81,9 @@ const getDisplayName = (id) => {
         </div>
 
         <!-- "Confirm Configuration" button -->
-        <div class="menu-option confirm-button" @click="confirmConfiguration">
+        <Button type="confirm-config" @click="confirmConfiguration">
             Confirm Configuration
-        </div>
+        </Button>
 
         <!-- Confirmation Popup -->
         <transition name="popup">
@@ -93,12 +94,12 @@ const getDisplayName = (id) => {
                     <h3 v-else>Do you really want to cancel the configuration and go back to the homepage?</h3>
                     <div class="popup-buttons">
                         <!-- Configuration confirmation buttons -->
-                        <button v-if="!isConfirmation" @click="handleConfirmConfiguration">Yes</button>
-                        <button v-if="!isConfirmation" @click="cancelCancel">No</button>
+                        <Button type="confirm" v-if="!isConfirmation" @click="handleConfirmConfiguration">Yes</Button>
+                        <Button type="remove" v-if="!isConfirmation" @click="cancelCancel">No</Button>
 
                         <!-- Back to homepage confirmation buttons -->
-                        <button v-if="isConfirmation" @click="confirmCancel">Yes</button>
-                        <button v-if="isConfirmation" @click="cancelCancel">No</button>
+                        <Button type="confirm" v-if="isConfirmation" @click="confirmCancel">Yes</Button>
+                        <Button type="remove" v-if="isConfirmation" @click="cancelCancel">No</Button>
                     </div>
                 </div>
             </div>
@@ -120,29 +121,6 @@ const getDisplayName = (id) => {
     justify-content: space-between;
     z-index: 3;
     color: #fff;
-}
-
-.menu-option {
-    width: 80%;
-    height: 35px;
-    background-color: #333;
-    color: #fff;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
-    font-size: 0.75rem;
-}
-
-.menu-option:hover {
-    background-color: #555;
-}
-
-.back-button {
-    margin-top: 20px;
 }
 
 .shoe-options {
@@ -177,10 +155,6 @@ const getDisplayName = (id) => {
     color: #fff;
 }
 
-.confirm-button {
-    margin-bottom: 20px;
-}
-
 /* Popup styles */
 .popup-overlay {
     position: fixed;
@@ -208,19 +182,8 @@ const getDisplayName = (id) => {
     margin-top: 10px;
 }
 
-.popup-content button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+.popup-buttons Button {
     margin: 5px;
-    font-size: 0.75rem;
-}
-
-.popup-content button:hover {
-    background-color: #0056b3;
 }
 
 .popup-content h3 {
