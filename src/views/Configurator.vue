@@ -309,9 +309,6 @@ onMounted(() => {
     <MenuPopUp v-if="activeMenu !== null" :activeMenu="activeMenu" @closeMenu="closeMenu" @selectColor="selectColor"
       @selectMaterial="selectMaterial" @selectJewelry="selectJewelry" :colorOptions="colorOptions"
       :materialOptions="materialOptions" />
-    <!-- Confirm Configuration Button -->
-    <button @click="saveConfiguration" style="position: absolute; top: 10px; right: 10px;">Confirm
-      Configuration</button>
   </div>
 </template>
 
