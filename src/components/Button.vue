@@ -1,9 +1,3 @@
-<template>
-  <button :class="computedClass" @click="handleClick">
-    <slot></slot>
-  </button>
-</template>
-
 <script setup>
 import { defineProps } from 'vue';
 
@@ -11,7 +5,18 @@ const props = defineProps({
   type: {
     type: String,
     default: 'default',
-    validator: (value) => ['log-out', 'details', 'confirm', 'remove', 'cancel', 'default', 'login', 'register'].includes(value)
+    validator: (value) => [
+      'log-out', 
+      'details', 
+      'confirm', 
+      'remove', 
+      'cancel', 
+      'default', 
+      'login', 
+      'register',
+      'back-home',  // Added 'back-home'
+      'confirm-config'  // Added 'confirm-config'
+    ].includes(value)
   }
 });
 
@@ -21,6 +26,12 @@ const handleClick = () => {
   // Handle button click actions as needed
 };
 </script>
+
+<template>
+  <button :class="computedClass" @click="handleClick">
+    <slot></slot>
+  </button>
+</template>
 
 <style scoped>
 button {
@@ -32,7 +43,7 @@ button {
   transition: background-color 0.3s ease;
 }
 
-.btn-log-out {
+.btn-log-out, .btn-remove {
   background-color: #dc3545;
   color: white;
 }
@@ -44,11 +55,6 @@ button {
 
 .btn-confirm {
   background-color: #28a745;
-  color: white;
-}
-
-.btn-remove {
-  background-color: #dc3545;
   color: white;
 }
 
@@ -69,6 +75,16 @@ button {
 
 .btn-register {
   background-color: #000000;
+  color: white;
+}
+
+.btn-back-home { 
+  background-color: #555555;
+  color: white;
+}
+
+.btn-confirm-config { 
+  background-color: #0062cc;
   color: white;
 }
 
