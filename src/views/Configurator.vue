@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import axios from 'axios';
 
 import LeftMenu from '../components/LeftMenu.vue';
 import MenuPopUp from '../components/MenuPopUp.vue';
@@ -20,7 +21,7 @@ const circles = ref([
 
 const activeMenu = ref(null);
 const shoeModel = ref(null);
-const shoeSize = ref(42); // Default shoe size
+const shoeSize = ref(42);
 
 // Define color options
 const colorOptions = ref([
@@ -137,6 +138,44 @@ const selectMaterial = (part, materialTextures) => {
     });
   }
   closeMenu();
+};
+
+// Function to select jewelry
+const selectJewelry = (jewelryOption) => {
+  console.log(`Selected jewelry:`, jewelryOption);
+  // Implement the logic to apply jewelry option to the model
+  closeMenu();
+};
+
+// Function to save configuration
+const saveConfiguration = async () => {
+  try {
+    // Extract current configuration from the model
+    const configuration = { colorOptions: {}, materialOptions: {}, shoeSize: shoeSize.value };
+
+    // Extract colors and materials from the shoe model
+    shoeModel.value.traverse((child) => {
+      if (child.isMesh) {
+        const color = child.material.color.getHexString();
+        configuration.colorOptions[child.name] = `#${color}`;
+        // Assuming material is a simple material with basic properties
+        configuration.materialOptions[child.name] = {
+          ao: child.material.map ? child.material.map.image.src : '',
+          base: child.material.map ? child.material.map.image.src : '',
+          normal: child.material.normalMap ? child.material.normalMap.image.src : '',
+          roughness: child.material.roughnessMap ? child.material.roughnessMap.image.src : '',
+          opacity: child.material.opacityMap ? child.material.opacityMap.image.src : ''
+        };
+      }
+    });
+
+    const response = await axios.post('/api/saveConfiguration', configuration);
+    console.log('Configuration saved successfully:', response.data);
+    alert('Configuration saved successfully!');
+  } catch (error) {
+    console.error('Error saving configuration:', error);
+    alert('Failed to save configuration.');
+  }
 };
 
 // Initialize Three.js scene
@@ -268,7 +307,11 @@ onMounted(() => {
     <div id="threejs-container"></div>
     <LeftMenu :circles="circles" :activeMenu="activeMenu" @toggleMenu="toggleMenu" />
     <MenuPopUp v-if="activeMenu !== null" :activeMenu="activeMenu" @closeMenu="closeMenu" @selectColor="selectColor"
-      @selectMaterial="selectMaterial" :colorOptions="colorOptions" :materialOptions="materialOptions" />
+      @selectMaterial="selectMaterial" @selectJewelry="selectJewelry" :colorOptions="colorOptions"
+      :materialOptions="materialOptions" />
+    <!-- Confirm Configuration Button -->
+    <button @click="saveConfiguration" style="position: absolute; top: 10px; right: 10px;">Confirm
+      Configuration</button>
   </div>
 </template>
 
