@@ -1,5 +1,6 @@
 <script setup>
 import { defineProps, defineEmits, ref, computed } from 'vue';
+import axios from 'axios'; // Import axios for API requests
 
 // Define props
 const props = defineProps({
@@ -21,13 +22,14 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(['closeMenu', 'selectColor', 'selectMaterial', 'update:shoeSize', 'selectJewelry']);
+const emits = defineEmits(['closeMenu', 'selectColor', 'selectMaterial', 'update:shoeSize', 'selectJewelry', 'update:title']);
 
 // Define size limits
 const MIN_EU_SIZE = 35; // Minimum EU size
 const MAX_EU_SIZE = 50; // Maximum EU size
 
 const euroSize = ref(props.shoeSize);
+const title = ref('');
 
 // Compute US and UK sizes based on the input EU size
 const usSize = computed(() => convertEuroToUS(euroSize.value));
@@ -38,7 +40,7 @@ const convertEuroToUS = (euroSize) => (euroSize - 33) * 1.5 + 4;
 const convertEuroToUK = (euroSize) => euroSize - 33;
 
 // Update size function with limits
-const updateShoeSize = (event) => {
+const updateShoeSize = async (event) => {
     let newSize = Number(event.target.value);
     if (newSize < MIN_EU_SIZE) {
         newSize = MIN_EU_SIZE;
@@ -47,6 +49,7 @@ const updateShoeSize = (event) => {
     }
     euroSize.value = newSize;
     emits('update:shoeSize', newSize);
+    await saveConfiguration(); // Save configuration after updating size
 };
 
 // Emit closeMenu event
@@ -55,24 +58,51 @@ const closeMenu = () => {
 };
 
 // Emit selectColor event
-const selectColor = (color) => {
+const selectColor = async (color) => {
     emits('selectColor', props.activeMenu, color);
+    await saveConfiguration(); // Save configuration after selecting color
 };
 
 // Emit selectMaterial event
-const selectMaterial = (materialName) => {
+const selectMaterial = async (materialName) => {
     const selectedMaterial = props.materialOptions.find(m => m.name === materialName);
     if (selectedMaterial) {
-        console.log(`Selected material: ${materialName}`, selectedMaterial.textures);
         emits('selectMaterial', props.activeMenu, selectedMaterial.textures);
+        await saveConfiguration(); // Save configuration after selecting material
     } else {
         console.error(`Material ${materialName} not found`);
     }
 };
 
 // Emit selectJewelry event
-const selectJewelry = (jewelryOption) => {
+const selectJewelry = async (jewelryOption) => {
     emits('selectJewelry', props.activeMenu, jewelryOption);
+    await saveConfiguration(); // Save configuration after selecting jewelry
+};
+
+// Update title
+const updateTitle = (event) => {
+    title.value = event.target.value;
+    emits('update:title', title.value);
+};
+
+// Save configuration to the backend
+const saveConfiguration = async () => {
+    const config = {
+        size: euroSize.value,
+        title: title.value, // Include title in configuration
+        colors: {}, // Map of parts and their selected colors
+        materials: {}, // Map of parts and their selected materials
+        jewelry: {} // Map of selected jewelry
+    };
+
+    // Collect color, material, and jewelry data
+    try {
+        const response = await axios.post('/api/v1/shoe', config);
+        console.log('Configuration saved successfully', response.data);
+    } catch (error) {
+        console.error('Error saving configuration:', error);
+    }
 };
 </script>
 
@@ -125,6 +155,18 @@ const selectJewelry = (jewelryOption) => {
                             placeholder="EU Size" :min="MIN_EU_SIZE" :max="MAX_EU_SIZE" />
                         <p>US Size: {{ usSize.toFixed(1) }}</p>
                         <p>UK Size: {{ ukSize.toFixed(1) }}</p>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="price">
+                        <p>Price: $150.00</p>
+                    </div>
+
+                    <!-- Title input field -->
+                    <div class="title-input">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" v-model="title" @input="updateTitle"
+                            placeholder="Enter a title for your shoe" />
                     </div>
                 </template>
 
@@ -199,7 +241,6 @@ const selectJewelry = (jewelryOption) => {
 
 .jewelry-option {
     background-color: #ccc;
-    /* Placeholder styling for jewelry options */
     width: auto;
     padding: 10px;
     border-radius: 4px;
