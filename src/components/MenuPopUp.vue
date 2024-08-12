@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, defineEmits, ref, computed } from 'vue';
-import axios from 'axios'; // Import axios for API requests
+import axios from 'axios';
 
 // Define props
 const props = defineProps({
@@ -22,11 +22,18 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(['closeMenu', 'selectColor', 'selectMaterial', 'update:shoeSize', 'selectJewelry', 'update:title']);
+const emits = defineEmits([
+    'closeMenu',
+    'selectColor',
+    'selectMaterial',
+    'update:shoeSize',
+    'selectJewelry',
+    'update:title'
+]);
 
 // Define size limits
-const MIN_EU_SIZE = 35; // Minimum EU size
-const MAX_EU_SIZE = 50; // Maximum EU size
+const MIN_EU_SIZE = 35;
+const MAX_EU_SIZE = 50;
 
 const euroSize = ref(props.shoeSize);
 const title = ref('');
@@ -49,7 +56,7 @@ const updateShoeSize = async (event) => {
     }
     euroSize.value = newSize;
     emits('update:shoeSize', newSize);
-    await saveConfiguration(); // Save configuration after updating size
+    await saveConfiguration();
 };
 
 // Emit closeMenu event
@@ -60,7 +67,7 @@ const closeMenu = () => {
 // Emit selectColor event
 const selectColor = async (color) => {
     emits('selectColor', props.activeMenu, color);
-    await saveConfiguration(); // Save configuration after selecting color
+    await saveConfiguration();
 };
 
 // Emit selectMaterial event
@@ -68,7 +75,7 @@ const selectMaterial = async (materialName) => {
     const selectedMaterial = props.materialOptions.find(m => m.name === materialName);
     if (selectedMaterial) {
         emits('selectMaterial', props.activeMenu, selectedMaterial.textures);
-        await saveConfiguration(); // Save configuration after selecting material
+        await saveConfiguration();
     } else {
         console.error(`Material ${materialName} not found`);
     }
@@ -77,7 +84,7 @@ const selectMaterial = async (materialName) => {
 // Emit selectJewelry event
 const selectJewelry = async (jewelryOption) => {
     emits('selectJewelry', props.activeMenu, jewelryOption);
-    await saveConfiguration(); // Save configuration after selecting jewelry
+    await saveConfiguration();
 };
 
 // Update title
@@ -90,13 +97,12 @@ const updateTitle = (event) => {
 const saveConfiguration = async () => {
     const config = {
         size: euroSize.value,
-        title: title.value, // Include title in configuration
-        colors: {}, // Map of parts and their selected colors
-        materials: {}, // Map of parts and their selected materials
-        jewelry: {} // Map of selected jewelry
+        title: title.value,
+        colors: {},
+        materials: {},
+        jewelry: {}
     };
 
-    // Collect color, material, and jewelry data
     try {
         const response = await axios.post('/api/v1/shoe', config);
         console.log('Configuration saved successfully', response.data);
@@ -115,7 +121,8 @@ const saveConfiguration = async () => {
                     <h2>Select Color for {{ activeMenu }}</h2>
                     <div class="color-options">
                         <div v-for="color in colorOptions" :key="color" class="color-option"
-                            :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
+                            :style="{ backgroundColor: color }" @click="selectColor(color)">
+                        </div>
                     </div>
                 </template>
 
@@ -126,7 +133,8 @@ const saveConfiguration = async () => {
                         }} for {{ activeMenu }}</h2>
                     <div class="color-options">
                         <div v-for="color in colorOptions" :key="color" class="color-option"
-                            :style="{ backgroundColor: color }" @click="selectColor(color)"></div>
+                            :style="{ backgroundColor: color }" @click="selectColor(color)">
+                        </div>
                     </div>
                     <div class="material-options">
                         <div v-for="material in materialOptions" :key="material.name" class="material-option"
