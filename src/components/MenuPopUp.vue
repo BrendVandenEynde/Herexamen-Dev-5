@@ -149,7 +149,16 @@ const saveConfiguration = async () => {
                 <!-- Options -->
                 <template v-else-if="activeMenu === 'options'">
                     <h2>Options</h2>
+
+                    <!-- Title input field -->
+                    <div class="title-input">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" v-model="title" @input="updateTitle"
+                            placeholder="Enter a title for your shoe" />
+                    </div>
+
                     <div class="size-options">
+                        <h3>Please select your shoe size:</h3>
                         <label for="euro-size">EU Size:</label>
                         <input type="number" id="euro-size" :value="euroSize" @input="updateShoeSize"
                             placeholder="EU Size" :min="MIN_EU_SIZE" :max="MAX_EU_SIZE" />
@@ -159,14 +168,8 @@ const saveConfiguration = async () => {
 
                     <!-- Price -->
                     <div class="price">
+                        <h3>Your current configuration will cost:</h3>
                         <p>Price: $150.00</p>
-                    </div>
-
-                    <!-- Title input field -->
-                    <div class="title-input">
-                        <label for="title">Title:</label>
-                        <input type="text" id="title" v-model="title" @input="updateTitle"
-                            placeholder="Enter a title for your shoe" />
                     </div>
                 </template>
 
