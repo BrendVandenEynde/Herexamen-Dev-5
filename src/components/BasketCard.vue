@@ -29,14 +29,17 @@ const closePopup = () => {
     showPopup.value = false;
 };
 
-// Placeholder function for confirming an order
+// Function to handle the "Buy" button click
 const buyOrder = () => {
-    alert('Order confirmed!');
+    alert('Thank you for your purchase! Your order has been successfully placed.');
 };
 
-// Placeholder function for removing an order
+// Function to handle the "Remove" button click
 const removeOrder = () => {
-    alert('Order removed!');
+    if (confirm('Are you sure you want to remove this item from your basket? This action cannot be undone.')) {
+        alert('The item has been removed from your basket.');
+        // Additional logic to remove the item can be placed here
+    }
 };
 
 // Computed property to convert the image data to a usable format for the `img` tag
