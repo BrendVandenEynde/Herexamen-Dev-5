@@ -6,16 +6,16 @@ const props = defineProps({
     type: String,
     default: 'default',
     validator: (value) => [
-      'log-out', 
-      'details', 
-      'confirm', 
-      'remove', 
-      'cancel', 
-      'default', 
-      'login', 
+      'log-out',
+      'details',
+      'confirm',
+      'remove',
+      'cancel',
+      'default',
+      'login',
       'register',
-      'back-home',  // Added 'back-home'
-      'confirm-config'  // Added 'confirm-config'
+      'buy',
+      'confirm-config'
     ].includes(value)
   }
 });
@@ -40,10 +40,10 @@ button {
   cursor: pointer;
   border-radius: 4px;
   font-size: 0.875rem;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.btn-log-out, .btn-remove {
+.btn-log-out {
   background-color: #dc3545;
   color: white;
 }
@@ -78,8 +78,13 @@ button {
   color: white;
 }
 
-.btn-back-home { 
-  background-color: #555555;
+.btn-buy {         /* Added 'buy' style */
+  background-color: #28a745; /* Green for buying */
+  color: white;
+}
+
+.btn-remove {      /* Added 'remove' style */
+  background-color: #dc3545; /* Red for removing */
   color: white;
 }
 

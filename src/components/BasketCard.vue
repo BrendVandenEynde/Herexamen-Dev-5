@@ -30,7 +30,7 @@ const closePopup = () => {
 };
 
 // Placeholder function for confirming an order
-const confirmOrder = () => {
+const buyOrder = () => {
     alert('Order confirmed!');
 };
 
@@ -63,15 +63,9 @@ const imageSrc = computed(() => {
             <!-- Button to show the details popup -->
             <Button type="details" @click="showDetails">Details</Button>
             <div class="button-container">
-                <!-- Conditionally render buttons based on the variant -->
-                <template v-if="variant === 'basket'">
-                    <Button type="confirm" @click="confirmOrder">Confirm</Button>
-                    <Button type="remove" @click="removeOrder">Remove</Button>
-                </template>
-                <template v-else>
-                    <!-- The 'cancel' button is not used in this variant but kept for completeness -->
-                    <Button type="cancel" @click="removeOrder">Cancel Order</Button>
-                </template>
+                <!-- Buttons for different actions -->
+                <Button type="buy" @click="buyOrder">Buy</Button>
+                <Button type="remove" @click="removeOrder">Remove</Button>
             </div>
         </div>
 
