@@ -35,23 +35,19 @@ const closePopup = () => {
 
 // Function to handle the deletion of an order
 const removeOrder = async () => {
-    const confirmation = window.confirm('Are you sure you want to delete this item?');
-    if (confirmation) {
+    if (window.confirm('Are you sure you want to delete this item?')) {
         try {
-            // Ensure the token is present
             const token = localStorage.getItem('token');
             if (!token) {
                 throw new Error('No authentication token found');
             }
 
-            // Make the API request to delete the item
             await axios.delete(`http://localhost:5000/api/v1/shoe/${props.order._id}`, {
                 headers: {
                     'x-auth-token': token
                 }
             });
 
-            // Notify the user and handle successful deletion
             alert('Item has been removed from your basket.');
             emit('remove-item', props.order._id); // Emit event to parent component
         } catch (error) {
@@ -62,8 +58,31 @@ const removeOrder = async () => {
 };
 
 // Function to handle the purchase of an order
-const buyOrder = () => {
-    alert('Shoe purchased and order has been made!');
+const buyOrder = async () => {
+    if (window.confirm('Are you sure you want to buy this item?')) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            const response = await axios.put(`http://localhost:5000/api/v1/shoe/${props.order._id}/buy`, {}, {
+                headers: {
+                    'x-auth-token': token
+                }
+            });
+
+            if (response.status === 200) {
+                alert('Item purchased successfully!');
+                emit('remove-item', props.order._id); // Emit event to parent component
+            } else {
+                alert('Failed to purchase the item. Please try again later.');
+            }
+        } catch (error) {
+            console.error('Failed to purchase item:', error.response ? error.response.data : error.message);
+            alert('Failed to purchase the item. Please try again later.');
+        }
+    }
 };
 
 // Computed property to convert the image data to a usable format for the `img` tag
