@@ -1,20 +1,62 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import Navbar from '../components/NavBar.vue';
 import BasketCard from '../components/BasketCard.vue';
+import axios from 'axios';
 
-// Mock basket items for demonstration
-const basketItems = [
-    { id: 1, image: 'https://placehold.co/500x250', datetime: 'June 30, 2024 12:00 PM' },
-    { id: 2, image: 'https://placehold.co/500x250', datetime: 'July 1, 2024 3:00 PM' }
-];
+const basketItems = ref([]);
+const error = ref(null); // To hold any error message
+
+// Function to fetch the basket items from the backend
+const fetchBasketItems = async () => {
+    try {
+        // Ensure the token is present
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+
+        // Fetch basket items from the API
+        const response = await axios.get('http://localhost:5000/api/v1/shoe', {
+            headers: {
+                'x-auth-token': token // Pass the token with the request
+            }
+        });
+
+        // Log the response data for debugging
+        console.log('Response Data:', response.data);
+
+        // Check if the response contains the items and filter by isInBasket
+        if (Array.isArray(response.data)) {
+            basketItems.value = response.data.filter(item => item.isInBasket);
+        } else {
+            basketItems.value = []; // Handle unexpected responses
+        }
+    } catch (err) {
+        console.error('Failed to fetch basket items:', err);
+        error.value = 'Failed to fetch basket items. Please try again later.'; // Set error message
+        basketItems.value = []; // Handle the error by setting to an empty array
+    }
+};
+
+// Fetch the basket items when the component is mounted
+onMounted(() => {
+    fetchBasketItems();
+});
 </script>
 
 <template>
     <div class="basket-page">
         <Navbar />
         <h2>Basket Page</h2>
-        <div class="basket-cards">
-            <BasketCard v-for="item in basketItems" :key="item.id" :order="item" variant="basket" />
+        <!-- Display error message if there's an error -->
+        <div v-if="error" class="error-message">{{ error }}</div>
+        <!-- Display basket cards if there are items -->
+        <div v-else>
+            <div v-if="basketItems.length > 0" class="basket-cards">
+                <BasketCard v-for="item in basketItems" :key="item._id" :order="item" />
+            </div>
+            <div v-else class="no-items">No items in the basket</div>
         </div>
     </div>
 </template>
@@ -32,5 +74,18 @@ const basketItems = [
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     width: 100%;
     box-sizing: border-box;
+}
+
+.error-message {
+    color: red;
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.no-items {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
 }
 </style>
