@@ -1,8 +1,9 @@
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, computed } from 'vue';
 import OrderPopUp from './OrderPopUp.vue';
 import Button from './Button.vue';
 
+// Define the properties that the component will accept
 const props = defineProps({
     order: {
         type: Object,
@@ -10,60 +11,71 @@ const props = defineProps({
     },
     variant: {
         type: String,
-        default: 'list',  // 'list' or 'basket'
+        default: 'list',
         validator: (value) => ['list', 'basket'].includes(value)
     }
 });
 
+// State to control the visibility of the order details popup
 const showPopup = ref(false);
 
+// Function to show the details popup
 const showDetails = () => {
     showPopup.value = true;
 };
 
+// Function to close the details popup
 const closePopup = () => {
     showPopup.value = false;
 };
 
+// Placeholder function for confirming an order
 const confirmOrder = () => {
     alert('Order confirmed!');
 };
 
+// Placeholder function for removing an order
 const removeOrder = () => {
     alert('Order removed!');
 };
 
-const cancelOrder = () => {
-    alert('Order canceled!');
-};
-
-const order = {
-    title: 'Sample Item',
-    description: 'This is a detailed description of the item.',
-    price: 29.99,
-    ...props.order
-};
+// Computed property to convert the image data to a usable format for the `img` tag
+const imageSrc = computed(() => {
+    if (props.order.image && props.order.image.data) {
+        const imageData = new Uint8Array(props.order.image.data);
+        const base64String = btoa(String.fromCharCode(...imageData));
+        return `data:${props.order.imageType};base64,${base64String}`;
+    }
+    return ''; // Return an empty string if there's no image data
+});
 </script>
 
 <template>
     <div class="basket-card">
-        <img :src="order.image" alt="Basket Item Image" class="basket-image" />
+        <!-- Display the image if available -->
+        <img v-if="imageSrc" :src="imageSrc" alt="Basket Item Image" class="basket-image" />
+        <div v-else class="basket-image-placeholder">No Image Available</div>
 
+        <!-- Display the order title -->
         <div class="order-info">
             <h3>{{ order.title }}</h3>
-            <p class="datetime">{{ order.datetime }}</p>
+
+            <!-- Button to show the details popup -->
             <Button type="details" @click="showDetails">Details</Button>
             <div class="button-container">
+                <!-- Conditionally render buttons based on the variant -->
                 <template v-if="variant === 'basket'">
                     <Button type="confirm" @click="confirmOrder">Confirm</Button>
                     <Button type="remove" @click="removeOrder">Remove</Button>
                 </template>
                 <template v-else>
-                    <Button type="cancel" @click="cancelOrder">Cancel Order</Button>
+                    <!-- The 'cancel' button is not used in this variant but kept for completeness -->
+                    <Button type="cancel" @click="removeOrder">Cancel Order</Button>
                 </template>
             </div>
         </div>
 
+        <!-- Display the OrderPopUp component when showPopup is true -->
         <OrderPopUp v-if="showPopup" :order="order" @close="closePopup" />
     </div>
 </template>
@@ -95,6 +107,18 @@ const order = {
     border-bottom: 2px solid #000000;
 }
 
+.basket-image-placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    color: #999;
+    font-size: 1rem;
+    border-bottom: 2px solid #000000;
+}
+
 .order-info {
     padding: 1rem;
     text-align: center;
@@ -104,11 +128,6 @@ const order = {
     margin: 0;
     font-size: 1.25rem;
     color: #333;
-}
-
-.datetime {
-    color: #666;
-    font-size: 0.875rem;
 }
 
 .button-container {
