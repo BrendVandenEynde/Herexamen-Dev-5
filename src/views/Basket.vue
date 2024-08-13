@@ -23,20 +23,18 @@ const fetchBasketItems = async () => {
             }
         });
 
-        // Log the response data for debugging
-        console.log('Response Data:', response.data);
-
-        // Check if the response contains the items and filter by isInBasket
-        if (Array.isArray(response.data)) {
-            basketItems.value = response.data.filter(item => item.isInBasket);
-        } else {
-            basketItems.value = []; // Handle unexpected responses
-        }
+        // Set basketItems to response data
+        basketItems.value = response.data.filter(item => item.isInBasket);
     } catch (err) {
         console.error('Failed to fetch basket items:', err);
         error.value = 'Failed to fetch basket items. Please try again later.'; // Set error message
         basketItems.value = []; // Handle the error by setting to an empty array
     }
+};
+
+// Function to handle the removal of an item
+const handleRemoveItem = (id) => {
+    basketItems.value = basketItems.value.filter(item => item._id !== id);
 };
 
 // Fetch the basket items when the component is mounted
@@ -54,7 +52,7 @@ onMounted(() => {
         <!-- Display basket cards if there are items -->
         <div v-else>
             <div v-if="basketItems.length > 0" class="basket-cards">
-                <BasketCard v-for="item in basketItems" :key="item._id" :order="item" />
+                <BasketCard v-for="item in basketItems" :key="item._id" :order="item" @remove-item="handleRemoveItem" />
             </div>
             <div v-else class="no-items">No items in the basket</div>
         </div>
