@@ -1,7 +1,8 @@
 <script setup>
-import { ref, defineProps, computed } from 'vue';
+import { ref, defineProps, computed, defineEmits } from 'vue';
 import OrderPopUp from './OrderPopUp.vue';
 import Button from './Button.vue';
+import axios from 'axios';
 
 // Define the properties that the component will accept
 const props = defineProps({
@@ -16,6 +17,9 @@ const props = defineProps({
     }
 });
 
+// Define emits to communicate with parent
+const emit = defineEmits(['remove-item']);
+
 // State to control the visibility of the order details popup
 const showPopup = ref(false);
 
@@ -29,17 +33,37 @@ const closePopup = () => {
     showPopup.value = false;
 };
 
-// Function to handle the "Buy" button click
-const buyOrder = () => {
-    alert('Thank you for your purchase! Your order has been successfully placed.');
+// Function to handle the deletion of an order
+const removeOrder = async () => {
+    const confirmation = window.confirm('Are you sure you want to delete this item?');
+    if (confirmation) {
+        try {
+            // Ensure the token is present
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            // Make the API request to delete the item
+            await axios.delete(`http://localhost:5000/api/v1/shoe/${props.order._id}`, {
+                headers: {
+                    'x-auth-token': token
+                }
+            });
+
+            // Notify the user and handle successful deletion
+            alert('Item has been removed from your basket.');
+            emit('remove-item', props.order._id); // Emit event to parent component
+        } catch (error) {
+            console.error('Failed to remove item:', error.response ? error.response.data : error.message);
+            alert('Failed to remove the item. Please try again later.');
+        }
+    }
 };
 
-// Function to handle the "Remove" button click
-const removeOrder = () => {
-    if (confirm('Are you sure you want to remove this item from your basket? This action cannot be undone.')) {
-        alert('The item has been removed from your basket.');
-        // Additional logic to remove the item can be placed here
-    }
+// Function to handle the purchase of an order
+const buyOrder = () => {
+    alert('Shoe purchased and order has been made!');
 };
 
 // Computed property to convert the image data to a usable format for the `img` tag
