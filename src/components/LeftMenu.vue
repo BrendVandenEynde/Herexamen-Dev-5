@@ -46,6 +46,7 @@ const confirmConfiguration = () => {
 
 // Handle confirmation and redirect to basket
 const handleConfirmConfiguration = () => {
+    emits('saveConfiguration'); // Emit event to save configuration
     showPopup.value = false; // Hide the popup
     router.push({ name: 'Basket' }); // Navigate to the basket
 };
