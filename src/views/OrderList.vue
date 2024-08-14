@@ -27,6 +27,14 @@ const fetchOrderedItems = async () => {
   }
 };
 
+// Handle order cancellation
+const handleCancelOrder = (orderId) => {
+  // Filter out the canceled order from the list
+  orders.value = orders.value.filter(order => order._id !== orderId);
+  // Update isEmpty state
+  isEmpty.value = orders.value.length === 0;
+};
+
 // Fetch ordered items when component is mounted
 onMounted(() => {
   fetchOrderedItems();
@@ -43,7 +51,7 @@ onMounted(() => {
     <div v-else-if="isEmpty" class="empty-message">No items have been ordered yet.</div>
 
     <div v-else class="order-cards">
-      <OrderCard v-for="order in orders" :key="order._id" :order="order" />
+      <OrderCard v-for="order in orders" :key="order._id" :order="order" @cancel-order="handleCancelOrder" />
     </div>
   </div>
 </template>
