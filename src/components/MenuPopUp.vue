@@ -38,16 +38,16 @@ const MAX_EU_SIZE = 50;
 const euroSize = ref(props.shoeSize);
 const title = ref('');
 
-// Compute US and UK sizes based on the input EU size
-const usSize = computed(() => convertEuroToUS(euroSize.value));
-const ukSize = computed(() => convertEuroToUK(euroSize.value));
-
 // Conversion functions
 const convertEuroToUS = (euroSize) => (euroSize - 33) * 1.5 + 4;
 const convertEuroToUK = (euroSize) => euroSize - 33;
 
+// Compute US and UK sizes based on the input EU size
+const usSize = computed(() => convertEuroToUS(euroSize.value));
+const ukSize = computed(() => convertEuroToUK(euroSize.value));
+
 // Update size function with limits
-const updateShoeSize = async (event) => {
+const updateShoeSize = (event) => {
     let newSize = Number(event.target.value);
     if (newSize < MIN_EU_SIZE) {
         newSize = MIN_EU_SIZE;
@@ -56,7 +56,6 @@ const updateShoeSize = async (event) => {
     }
     euroSize.value = newSize;
     emits('update:shoeSize', newSize);
-    await saveConfiguration();
 };
 
 // Emit closeMenu event
@@ -65,26 +64,23 @@ const closeMenu = () => {
 };
 
 // Emit selectColor event
-const selectColor = async (color) => {
+const selectColor = (color) => {
     emits('selectColor', props.activeMenu, color);
-    await saveConfiguration();
 };
 
 // Emit selectMaterial event
-const selectMaterial = async (materialName) => {
+const selectMaterial = (materialName) => {
     const selectedMaterial = props.materialOptions.find(m => m.name === materialName);
     if (selectedMaterial) {
         emits('selectMaterial', props.activeMenu, selectedMaterial.textures);
-        await saveConfiguration();
     } else {
         console.error(`Material ${materialName} not found`);
     }
 };
 
 // Emit selectJewelry event
-const selectJewelry = async (jewelryOption) => {
+const selectJewelry = (jewelryOption) => {
     emits('selectJewelry', props.activeMenu, jewelryOption);
-    await saveConfiguration();
 };
 
 // Update title
@@ -110,6 +106,7 @@ const saveConfiguration = async () => {
         console.error('Error saving configuration:', error);
     }
 };
+
 </script>
 
 <template>
@@ -181,7 +178,6 @@ const saveConfiguration = async () => {
                     </div>
                 </template>
 
-                <button @click="closeMenu">Close</button>
             </div>
         </div>
     </transition>
