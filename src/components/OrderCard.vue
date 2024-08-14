@@ -1,28 +1,83 @@
 <script setup>
-const order = {
-    id: 1,
-    image: 'https://placehold.co/500x250', // Placeholder image URL
-    datetime: 'June 30, 2024 12:00 PM' // Example date and time
-};
+import { ref, defineProps, defineEmits, computed } from 'vue';
+import axios from 'axios';
+import Button from './Button.vue'; 
 
+// Define the properties that the component will accept
+const props = defineProps({
+    order: {
+        type: Object,
+        required: true
+    }
+});
+
+// Define emits to communicate with parent
+const emit = defineEmits(['cancel-order']);
+
+// State to control the visibility of the order details popup
+const showPopup = ref(false);
+
+// Function to show the details popup
 const showDetails = () => {
-    // Implement function to show order details
+    showPopup.value = true;
 };
 
-const cancelOrder = () => {
-    // Implement function to cancel order
+// Function to close the details popup
+const closePopup = () => {
+    showPopup.value = false;
 };
+
+// Function to handle the cancellation of an order
+const cancelOrder = async () => {
+    if (window.confirm('Are you sure you want to cancel this order?')) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            await axios.delete(`http://localhost:5000/api/v1/shoe/${props.order._id}`, {
+                headers: {
+                    'x-auth-token': token
+                }
+            });
+
+            alert('Order has been canceled.');
+            emit('cancel-order', props.order._id); 
+        } catch (error) {
+            console.error('Failed to cancel order:', error.response ? error.response.data : error.message);
+            alert('Failed to cancel the order. Please try again later.');
+        }
+    }
+};
+
+// Computed property to convert the image data to a usable format for the `img` tag
+const imageSrc = computed(() => {
+    if (props.order.image && props.order.image.data) {
+        const imageData = new Uint8Array(props.order.image.data);
+        const base64String = btoa(String.fromCharCode(...imageData));
+        return `data:${props.order.imageType};base64,${base64String}`;
+    }
+    return ''; // Return an empty string if there's no image data
+});
 </script>
 
 <template>
     <div class="order-card">
-        <img :src="order.image" alt="Order Image" class="order-image" />
+        <!-- Display the image if available -->
+        <img v-if="imageSrc" :src="imageSrc" alt="Order Item Image" class="order-image" />
+        <div v-else class="order-image-placeholder">No Image Available</div>
 
-        <div class="order-details">
+        <!-- Display the order title and datetime -->
+        <div class="order-info">
+            <h3>{{ order.title }}</h3>
             <p>{{ order.datetime }}</p>
+
+            <!-- Button to show the details popup -->
+            <Button type="details" @click="showDetails">Details</Button>
             <div class="button-container">
-                <button @click="showDetails">Details</button>
-                <button @click="cancelOrder">Cancel Order</button>
+                <!-- Button to cancel the order -->
+                <Button type="remove" @click="cancelOrder">Cancel Order</Button>
             </div>
         </div>
     </div>
@@ -33,39 +88,55 @@ const cancelOrder = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid #ccc;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    overflow: hidden;
     padding: 1rem;
     margin-bottom: 1rem;
-    max-width: 300px;
-    /* Adjust as needed */
+    max-width: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.order-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
 }
 
 .order-image {
     width: 100%;
-    max-height: 200px;
-    /* Adjust as needed */
+    height: 200px;
     object-fit: cover;
+    border-bottom: 2px solid #000000;
 }
 
-.order-details {
-    margin-top: 0.5rem;
+.order-image-placeholder {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    color: #999;
+    font-size: 1rem;
+    border-bottom: 2px solid #000000;
+}
+
+.order-info {
+    padding: 1rem;
     text-align: center;
+}
+
+.order-info h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
 }
 
 .button-container {
     margin-top: 0.5rem;
-}
-
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    margin-right: 0.5rem;
-}
-
-button:hover {
-    background-color: #0056b3;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
 }
 </style>
