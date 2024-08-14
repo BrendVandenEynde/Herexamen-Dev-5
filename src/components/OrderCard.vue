@@ -1,7 +1,7 @@
 <script setup>
 import { ref, defineProps, defineEmits, computed } from 'vue';
 import axios from 'axios';
-import Button from './Button.vue'; 
+import Button from './Button.vue';
 
 // Define the properties that the component will accept
 const props = defineProps({
@@ -36,6 +36,7 @@ const cancelOrder = async () => {
                 throw new Error('No authentication token found');
             }
 
+            // Send DELETE request to cancel the order
             await axios.delete(`http://localhost:5000/api/v1/shoe/${props.order._id}`, {
                 headers: {
                     'x-auth-token': token
@@ -43,7 +44,7 @@ const cancelOrder = async () => {
             });
 
             alert('Order has been canceled.');
-            emit('cancel-order', props.order._id); 
+            emit('cancel-order', props.order._id); // Emit the event to the parent component to update the UI
         } catch (error) {
             console.error('Failed to cancel order:', error.response ? error.response.data : error.message);
             alert('Failed to cancel the order. Please try again later.');
