@@ -2,6 +2,7 @@
 import { ref, defineProps, defineEmits, computed } from 'vue';
 import axios from 'axios';
 import Button from './Button.vue';
+import OrderPopUp from './OrderPopUp.vue'; // Import the OrderPopUp component
 
 // Define the properties that the component will accept
 const props = defineProps({
@@ -81,6 +82,9 @@ const imageSrc = computed(() => {
                 <Button type="remove" @click="cancelOrder">Cancel Order</Button>
             </div>
         </div>
+
+        <!-- Display the OrderPopUp component when showPopup is true -->
+        <OrderPopUp v-if="showPopup" :order="order" @close="closePopup" />
     </div>
 </template>
 
