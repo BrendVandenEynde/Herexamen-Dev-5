@@ -100,8 +100,8 @@ onMounted(() => {
 
 .order-cards {
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem; /* Increased gap to provide more space between cards */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Increased min-width for better fit */
   width: 100%;
   box-sizing: border-box;
 }
