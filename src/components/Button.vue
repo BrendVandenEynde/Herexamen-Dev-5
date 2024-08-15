@@ -22,8 +22,9 @@ const props = defineProps({
 
 const computedClass = `btn-${props.type}`;
 
-const handleClick = () => {
-  // Handle button click actions as needed
+const handleClick = (event) => {
+  // Allow the default action unless explicitly prevented
+  event.preventDefault();
 };
 </script>
 
@@ -78,13 +79,13 @@ button {
   color: white;
 }
 
-.btn-buy {         /* Added 'buy' style */
-  background-color: #28a745; /* Green for buying */
+.btn-buy {         
+  background-color: #28a745; 
   color: white;
 }
 
-.btn-remove {      /* Added 'remove' style */
-  background-color: #dc3545; /* Red for removing */
+.btn-remove {      
+  background-color: #dc3545; 
   color: white;
 }
 
