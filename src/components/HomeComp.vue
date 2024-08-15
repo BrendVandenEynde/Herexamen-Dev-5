@@ -12,7 +12,7 @@ onMounted(() => {
 <template>
   <div>
     <h2>Home</h2>
-    <p v-if="userName">Welcome back, {{ userName }}!</p>
+    <p v-if="userName">Welcome!</p>
     <p v-else>Welcome to the home page!</p>
   </div>
 </template>
