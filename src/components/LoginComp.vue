@@ -10,7 +10,7 @@ const router = useRouter();
 const handleLogin = async () => {
   if (username.value && password.value) {
     try {
-      const response = await fetch('http://localhost:5000/api/v1/auth/login', {
+      const response = await fetch('https://herexamen-dev-5-back-end.vercel.app/api/v1/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
