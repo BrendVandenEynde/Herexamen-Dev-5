@@ -32,16 +32,19 @@ const handleRegister = async () => {
                     postalCode: postalCode.value
                 })
             });
-            const data = await response.json();
-            if (response.ok) {
-                // Save token and redirect to home
-                localStorage.setItem('token', data.token);
-                router.push({ name: 'Home' });
-            } else {
-                // Display detailed error message
-                alert(data.msg || 'Error registering user');
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(errorData.msg || 'Error registering user');
+                console.error('Server Response:', errorData);
+                return;
             }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            router.push({ name: 'Home' });
         } catch (error) {
+            console.error('Error registering user:', error);
             alert('Error registering user');
         }
     } else {
@@ -86,10 +89,8 @@ const handleRegister = async () => {
                 <label for="postalCode">Postal Code:</label>
                 <input type="text" id="postalCode" v-model="postalCode" placeholder="Postal Code" required />
             </div>
-            <!-- Apply the 'register' type to the Register button -->
-            <Button type="register" class="full-width">Register</Button>
+            <Button type="register" class="full-width" @click.prevent="handleRegister">Register</Button>
             <div class="form-links">
-                <!-- Apply the 'login' type to the Back to Login button -->
                 <Button type="login" class="full-width" @click="router.push({ name: 'Login' })">Back to Login</Button>
             </div>
         </form>
