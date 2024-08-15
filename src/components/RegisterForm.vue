@@ -7,10 +7,14 @@ const name = ref('');
 const email = ref('');
 const password = ref('');
 const country = ref('');
+const street = ref('');
+const houseNumber = ref('');
+const city = ref('');
+const postalCode = ref('');
 const router = useRouter();
 
 const handleRegister = async () => {
-    if (name.value && email.value && password.value && country.value) {
+    if (name.value && email.value && password.value && country.value && street.value && houseNumber.value && city.value && postalCode.value) {
         try {
             const response = await fetch('http://localhost:5000/api/v1/auth/register', {
                 method: 'POST',
@@ -21,7 +25,11 @@ const handleRegister = async () => {
                     name: name.value,
                     email: email.value,
                     password: password.value,
-                    country: country.value
+                    country: country.value,
+                    street: street.value,
+                    houseNumber: houseNumber.value,
+                    city: city.value,
+                    postalCode: postalCode.value
                 })
             });
             const data = await response.json();
@@ -61,6 +69,22 @@ const handleRegister = async () => {
             <div class="form-group">
                 <label for="country">Country:</label>
                 <input type="text" id="country" v-model="country" placeholder="Country" required />
+            </div>
+            <div class="form-group">
+                <label for="street">Street:</label>
+                <input type="text" id="street" v-model="street" placeholder="Street" required />
+            </div>
+            <div class="form-group">
+                <label for="houseNumber">House Number:</label>
+                <input type="text" id="houseNumber" v-model="houseNumber" placeholder="House Number" required />
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" v-model="city" placeholder="City" required />
+            </div>
+            <div class="form-group">
+                <label for="postalCode">Postal Code:</label>
+                <input type="text" id="postalCode" v-model="postalCode" placeholder="Postal Code" required />
             </div>
             <!-- Apply the 'register' type to the Register button -->
             <Button type="register" class="full-width">Register</Button>
