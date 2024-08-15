@@ -96,34 +96,35 @@ const imageSrc = computed(() => {
     border: 2px solid #000000;
     border-radius: 8px;
     overflow: hidden;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    max-width: 350px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem; /* Increased padding for more space */
+    margin-bottom: 1.5rem; /* Increased margin for spacing */
+    max-width: 400px; /* Increased max-width for larger cards */
+    min-width: 300px; /* Minimum width to ensure cards are not too narrow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Slightly larger shadow for better effect */
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .order-card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
     transform: translateY(-5px);
 }
 
 .order-image {
     width: 100%;
-    height: 200px;
+    height: 250px; /* Increased height for larger images */
     object-fit: cover;
     border-bottom: 2px solid #000000;
 }
 
 .order-image-placeholder {
     width: 100%;
-    height: 200px;
+    height: 250px; /* Increased height for consistency */
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #f0f0f0;
     color: #999;
-    font-size: 1rem;
+    font-size: 1.2rem; /* Slightly larger font size */
     border-bottom: 2px solid #000000;
 }
 
@@ -134,14 +135,14 @@ const imageSrc = computed(() => {
 
 .order-info h3 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.5rem; /* Larger font size for better readability */
     color: #333;
 }
 
 .button-container {
-    margin-top: 0.5rem;
+    margin-top: 1rem; /* Increased margin for better spacing */
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem; /* Increased gap for better button separation */
     justify-content: center;
 }
 </style>
