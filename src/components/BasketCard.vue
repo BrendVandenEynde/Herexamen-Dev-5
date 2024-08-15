@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineProps, computed, defineEmits } from 'vue';
-import OrderPopUp from './OrderPopUp.vue';
+import BasketPopUp from './BasketPopUp.vue'; // Ensure this is the correct path
 import Button from './Button.vue';
 import axios from 'axios';
 
@@ -115,8 +115,8 @@ const imageSrc = computed(() => {
             </div>
         </div>
 
-        <!-- Display the OrderPopUp component when showPopup is true -->
-        <OrderPopUp v-if="showPopup" :order="order" @close="closePopup" />
+        <!-- Display the BasketPopUp component when showPopup is true -->
+        <BasketPopUp v-if="showPopup" :order="order" @close="closePopup" />
     </div>
 </template>
 
