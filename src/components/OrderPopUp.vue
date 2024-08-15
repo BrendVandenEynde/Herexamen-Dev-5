@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits } from 'vue';
+import { defineEmits, defineProps } from 'vue';
 
 const props = defineProps({
     order: {
@@ -20,8 +20,15 @@ const closePopup = () => {
         <div class="popup-content">
             <button class="close-button" @click="closePopup">✕</button>
             <h3>{{ order.title || 'No Title' }}</h3>
-            <p>{{ order.description || 'No Description' }}</p>
-            <p>Price: {{ order.price || 'N/A' }}</p>
+            <p><strong>Price:</strong> {{ order.price || 'N/A' }}</p>
+            <p><strong>Size:</strong> {{ order.size || 'N/A' }}</p>
+            <p><strong>Colors:</strong> {{ order.colorOptions.length > 0 ? order.colorOptions.join(', ') : 'No Colors' }}</p>
+            <p><strong>Materials:</strong> {{ order.materialOptions.length > 0 ? order.materialOptions.join(', ') : 'No Materials' }}</p>
+            <p><strong>Jewelry:</strong> {{ order.jewelryOptions.length > 0 ? order.jewelryOptions.join(', ') : 'No Jewelry' }}</p>
+            <p><strong>Picked By:</strong> {{ order.user?.name || 'Unknown' }}</p>
+            <p><strong>Email:</strong> {{ order.user?.email || 'No Email Provided' }}</p>
+            <p><strong>Address:</strong> {{ order.user ? `${order.user.street}, ${order.user.houseNumber}, ${order.user.city}, ${order.user.postalCode}` : 'No Address Provided' }}</p>
+            <p><strong>Description:</strong> {{ order.description || 'No Description' }}</p>
         </div>
     </div>
 </template>
@@ -45,8 +52,9 @@ const closePopup = () => {
     padding: 2rem;
     border-radius: 8px;
     position: relative;
-    max-width: 500px;
+    max-width: 600px; /* Increased max-width to accommodate more content */
     width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow for better appearance */
 }
 
 .close-button {
