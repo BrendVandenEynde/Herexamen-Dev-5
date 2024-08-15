@@ -28,7 +28,6 @@ const closePopup = () => {
             <p><strong>Picked By:</strong> {{ order.user?.name || 'Unknown' }}</p>
             <p><strong>Email:</strong> {{ order.user?.email || 'No Email Provided' }}</p>
             <p><strong>Address:</strong> {{ order.user ? `${order.user.street}, ${order.user.houseNumber}, ${order.user.city}, ${order.user.postalCode}` : 'No Address Provided' }}</p>
-            <p><strong>Description:</strong> {{ order.description || 'No Description' }}</p>
         </div>
     </div>
 </template>
@@ -44,17 +43,21 @@ const closePopup = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1000; /* Ensure it is above all other content */
 }
 
 .popup-content {
     background: white;
     padding: 2rem;
     border-radius: 8px;
-    position: relative;
-    max-width: 600px; /* Increased max-width to accommodate more content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 90vw; /* Responsive width for smaller screens */
     width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added shadow for better appearance */
+    position: relative;
+    z-index: 1001; /* Ensure content is above the overlay */
+    transform: translateY(0);
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .close-button {
@@ -66,6 +69,7 @@ const closePopup = () => {
     font-size: 1.5rem;
     cursor: pointer;
     color: black;
+    z-index: 1002; /* Ensure button is above content */
 }
 
 button {
