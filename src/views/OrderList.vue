@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import Navbar from '../components/NavBar.vue';
 import OrderCard from '../components/OrderCard.vue';
 import axios from 'axios';
@@ -8,6 +8,7 @@ const orders = ref([]);
 const isLoading = ref(true);
 const isEmpty = ref(false);
 const errorMessage = ref('');
+let socket = null;
 
 // Fetch ordered items from the API
 const fetchOrderedItems = async () => {
@@ -25,16 +26,12 @@ const fetchOrderedItems = async () => {
 
     orders.value = response.data;
     isEmpty.value = orders.value.length === 0;
-    if (isEmpty.value) {
-      errorMessage.value = null; // Clear error message if no items found
-    }
+    errorMessage.value = isEmpty.value ? null : errorMessage.value; // Clear error message if items are found
   } catch (error) {
     console.error('Error fetching ordered items:', error);
     if (error.response && error.response.status === 404) {
-      // Handle 404 error specifically
       errorMessage.value = 'No orders found.';
     } else {
-      // Handle other errors
       errorMessage.value = 'Failed to load orders. Please try again later.';
     }
     orders.value = [];
@@ -58,18 +55,68 @@ const handleCancelOrder = async (orderId) => {
       }
     });
 
-    // Filter out the canceled order from the list
-    orders.value = orders.value.filter(order => order._id !== orderId);
-    isEmpty.value = orders.value.length === 0;
+    alert('Order has been canceled.');
+    fetchOrderedItems(); // Refresh the list immediately after canceling the order
   } catch (error) {
     console.error('Error cancelling order:', error);
-    errorMessage.value = 'Failed to cancel the order. Please try again later.';
+    if (error.response && error.response.status === 404) {
+      errorMessage.value = 'Order not found. It might have been already canceled.';
+    } else {
+      errorMessage.value = 'Failed to cancel the order. Please try again later.';
+    }
+  }
+};
+
+// Set up WebSocket connection
+const setupWebSocket = () => {
+  try {
+    socket = new WebSocket('ws://localhost:5173/'); // Updated URL
+
+    socket.onopen = () => {
+      console.log('WebSocket connection established');
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+
+      if (message.type === 'orderUpdated' || message.type === 'orderCanceled') {
+        fetchOrderedItems(); // Refresh the list on receiving update
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+      errorMessage.value = 'WebSocket connection error. Please check your connection.';
+    };
+
+    socket.onclose = (event) => {
+      console.log('WebSocket connection closed:', event);
+      if (!event.wasClean) {
+        errorMessage.value = 'WebSocket connection closed unexpectedly. Reconnecting...';
+        setTimeout(setupWebSocket, 3000); // Try to reconnect after 3 seconds
+      }
+    };
+  } catch (error) {
+    console.error('WebSocket setup error:', error);
+    errorMessage.value = 'Failed to set up WebSocket connection.';
+  }
+};
+
+// Clean up WebSocket connection
+const cleanupWebSocket = () => {
+  if (socket) {
+    socket.close();
   }
 };
 
 // Fetch ordered items when component is mounted
 onMounted(() => {
   fetchOrderedItems();
+  setupWebSocket();
+});
+
+onUnmounted(() => {
+  cleanupWebSocket();
 });
 </script>
 
@@ -100,8 +147,8 @@ onMounted(() => {
 
 .order-cards {
   display: grid;
-  gap: 2rem; /* Increased gap to provide more space between cards */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Increased min-width for better fit */
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   width: 100%;
   box-sizing: border-box;
 }
